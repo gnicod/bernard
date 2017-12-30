@@ -4,6 +4,7 @@ import jwt
 import re
 import asyncio
 import ujson
+import logging
 from textwrap import dedent
 from urllib.parse import urljoin
 from hashlib import sha1
@@ -17,6 +18,9 @@ from bernard.platforms.facebook.platform import FacebookMessage, Facebook
 from bernard.platforms import manager
 from bernard.conf import settings
 from bernard.analytics.base import providers as analytics_providers
+
+
+logger = logging.getLogger('bernard.platform.facebook')
 
 
 def sign_message(body: ByteString, secret: Text) -> Text:
@@ -90,6 +94,8 @@ async def receive_events(request: Request):
         }, status=401)
 
     fb = await manager.get_platform('facebook')
+
+    logger.debug('Got from FB: %s', content)
 
     for entry in content['entry']:
         for raw_message in entry.get('messaging', []):
