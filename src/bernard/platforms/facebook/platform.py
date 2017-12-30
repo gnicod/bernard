@@ -602,6 +602,8 @@ class Facebook(SimplePlatform):
         Actually proceed to sending the message to the Facebook API.
         """
 
+        await asyncio.sleep(10)
+
         msg = ujson.dumps({
             'recipient': {
                 'id': request.conversation.fbid,
