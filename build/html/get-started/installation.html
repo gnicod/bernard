@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/get-started/installation.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<span id="installation"></span><h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>BERNARD is a standard Python package and has a few dependencies. We’ll
+try to give pointers at how to work with it.</p>
+<div class="section" id="requirements">
+<span id="requirements"></span><h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Overall, BERNARD requires:</p>
+<ul class="simple">
+<li><strong>Python 3.6+</strong> as it uses heavily very recent syntaxes and features</li>
+<li><strong>Redis</strong> for short-term memory</li>
+</ul>
+</div>
+<div class="section" id="python-setup">
+<span id="python-setup"></span><h2>Python setup<a class="headerlink" href="#python-setup" title="Permalink to this headline">¶</a></h2>
+<p>While this is not a tutorial on how to use Python, we’ll try to give you
+a few links to help you getting started.</p>
+<p>In order to have a development environment that is easy to manage, it is
+recommended to have a virtual environment. You can have a look over
+there for guidance:</p>
+<ul class="simple">
+<li>Linux/OSX: you can use <a class="reference external" href="https://github.com/pyenv/pyenv-installer">pyenv</a></li>
+<li>Windows: you can follow
+<a class="reference external" href="http://timmyreilly.azurewebsites.net/python-pip-virtualenv-installation-on-windows/">this tutorial</a>
+and then
+<a class="reference external" href="http://timmyreilly.azurewebsites.net/setup-a-virtualenv-for-python-3-on-windows/">this one</a></li>
+</ul>
+<p>In order to write code, the author recommends to use
+<a class="reference external" href="https://www.jetbrains.com/pycharm/download/#section=linux">PyCharm Community</a>,
+which is a really powerful editor. In any case, you should configure
+your IDE to use the virtualenv you created.</p>
+</div>
+<div class="section" id="install-bernard">
+<span id="install-bernard"></span><h2>Install BERNARD<a class="headerlink" href="#install-bernard" title="Permalink to this headline">¶</a></h2>
+<p>Finally, when your environment is set, you can install Bernard. You can
+simply do this with Pip:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> pip install bernard
+</pre></div>
+</div>
+</div>
+<div class="section" id="redis-setup">
+<span id="redis-setup"></span><h2>Redis setup<a class="headerlink" href="#redis-setup" title="Permalink to this headline">¶</a></h2>
+<p>No particular Redis configuration is required. You can install it from
+your package manager of follow the instructions found in the
+<a class="reference external" href="https://redis.io/topics/quickstart">redis quickstart</a>.</p>
+</div>
+<div class="section" id="wrap-up">
+<span id="wrap-up"></span><h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Permalink to this headline">¶</a></h2>
+<p>You need to get your hands on a Python 3.6+ environment and a Redis
+server. That’s a wide subject to cover, so we’ll leave you to it!</p>
+<p><strong>Next step</strong>: <a class="reference external" href="./start.md">start</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

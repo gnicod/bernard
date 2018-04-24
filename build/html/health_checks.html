@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Health Checks &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Health Checks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/health_checks.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="health-checks">
+<span id="health-checks"></span><h1>Health Checks<a class="headerlink" href="#health-checks" title="Permalink to this headline">¶</a></h1>
+<p>When the framework starts, it performs a health check on itself to detect
+possible bugs or misconfigurations. Here is the list of error codes and the
+explanation associated.</p>
+<div class="section" id="missing-fail-method">
+<span id="missing-fail-method"></span><h2>00001 - Missing fail method<a class="headerlink" href="#missing-fail-method" title="Permalink to this headline">¶</a></h2>
+<p>When you use the context’s <code class="docutils literal notranslate"><span class="pre">&#64;inject()</span></code> decorator with a non-empty <code class="docutils literal notranslate"><span class="pre">require</span></code>
+list then it might happen that the required context entry goes missing. In this
+case, your state is required to have a fail method which will be called in
+stead of the handler. The default name of this method is <code class="docutils literal notranslate"><span class="pre">missing_context</span></code> but
+you can configure it using the <code class="docutils literal notranslate"><span class="pre">fail</span></code> parameter.</p>
+</div>
+<div class="section" id="duplicate-platform">
+<span id="duplicate-platform"></span><h2>00002 - Duplicate platform<a class="headerlink" href="#duplicate-platform" title="Permalink to this headline">¶</a></h2>
+<p>This happens when the <code class="docutils literal notranslate"><span class="pre">PLATFORM</span></code> configuration variable contains the same
+platform twice. You need to review your configuration and remove duplicate
+platforms.</p>
+</div>
+<div class="section" id="non-existent-platform">
+<span id="non-existent-platform"></span><h2>00003 - Non-existent platform<a class="headerlink" href="#non-existent-platform" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">class</span></code> specified in the <code class="docutils literal notranslate"><span class="pre">PLATFORM</span></code> configuration cannot be found. You need
+to specify a platform that exist or to fix your Python PATH.</p>
+</div>
+<div class="section" id="missing-class-name">
+<span id="missing-class-name"></span><h2>00004 - Missing class name<a class="headerlink" href="#missing-class-name" title="Permalink to this headline">¶</a></h2>
+<p>In the <code class="docutils literal notranslate"><span class="pre">PLATFORMS</span></code> list, you need to specify a class name.</p>
+</div>
+<div class="section" id="incorrect-config">
+<span id="incorrect-config"></span><h2>00005 - Incorrect config<a class="headerlink" href="#incorrect-config" title="Permalink to this headline">¶</a></h2>
+<p>Something is missing in the configuration. The error message should give you
+information about what exactly is missing.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

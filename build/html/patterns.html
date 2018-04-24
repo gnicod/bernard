@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Patterns &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Patterns</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/patterns.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="patterns">
+<span id="patterns"></span><h1>Patterns<a class="headerlink" href="#patterns" title="Permalink to this headline">¶</a></h1>
+<p>After creating bots for some time, a few patterns emerge. Here’s a list
+of flow patterns that might help future bot builders to navigate in this
+new way of thinking.</p>
+<div class="section" id="menu">
+<span id="menu"></span><h2>Menu<a class="headerlink" href="#menu" title="Permalink to this headline">¶</a></h2>
+<p>Most platforms let you define some kind of menu. Facebook menus will
+result in <code class="docutils literal notranslate"><span class="pre">Postback</span></code> messages while Telegram menus will be treated as
+<code class="docutils literal notranslate"><span class="pre">BotCommand</span></code>. While you might have to use different triggers for both,
+the resulting transition will look like this:</p>
+<p><img alt="Menu pattern" src="_images/pattern-menu.svg" /></p>
+<p>This transition is either:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">trg.Action.builder('do_stuff')</span></code> for Facebook</li>
+<li><code class="docutils literal notranslate"><span class="pre">trg.Equal.builder(tgr.BotCommand('do_stuff'))</span></code> for Telegram</li>
+</ul>
+<p>Then you can connect any flow you want following this.</p>
+</div>
+<div class="section" id="branch">
+<span id="branch"></span><h2>Branch<a class="headerlink" href="#branch" title="Permalink to this headline">¶</a></h2>
+<p>Usually you can use quick replies (or assimilated) to create a
+branching pattern. Aka to make the user choose a direction to take in
+the flow.</p>
+<p><img alt="Branch pattern" src="_images/pattern-branch.svg" /></p>
+<p>There is two ways of doing this:</p>
+<ul class="simple">
+<li>Either by using buttons (FB or Telegram by example) which trigger a
+<code class="docutils literal notranslate"><span class="pre">Postback</span></code> message. In this case, you can use <code class="docutils literal notranslate"><span class="pre">Action</span></code> as trigger.</li>
+<li>Either by using quick replies (FB only). In this case, the <code class="docutils literal notranslate"><span class="pre">Choice</span></code>
+trigger is particularly fitting for your need.</li>
+</ul>
+<p>Example of a <code class="docutils literal notranslate"><span class="pre">Choice</span></code> trigger to do some branching:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trg</span><span class="o">.</span><span class="n">Choice</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="n">slug</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="filter">
+<span id="filter"></span><h2>Filter<a class="headerlink" href="#filter" title="Permalink to this headline">¶</a></h2>
+<p>The filter pattern is similar to the branch pattern in the sense that
+the user is presented with some choices (as buttons or quick replies),
+however when they click the buttons the state will loop back onto itself
+and possibly change some filtering parameters as to what should be
+displayed.</p>
+<p><img alt="Filter pattern" src="_images/pattern-filter.svg" /></p>
+<p>Example of a <code class="docutils literal notranslate"><span class="pre">Choice</span></code> trigger to do some filtering:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">trg</span><span class="o">.</span><span class="n">Choice</span><span class="o">.</span><span class="n">builder</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="background-check">
+<span id="background-check"></span><h2>Background check<a class="headerlink" href="#background-check" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes you want to take different branches depending on things that
+you know about your user. By example, is they linked to your website or
+just anonymous?</p>
+<p><img alt="Background check pattern" src="_images/pattern-background-check.svg" /></p>
+<p>This kind of check usually requires you to implement your custom
+trigger because the check you are doing is a call to your API.</p>
+<p>Please note that each trigger is evaluated individually and in parallel.
+So for instance, if your <code class="docutils literal notranslate"><span class="pre">Custom</span> <span class="pre">Test</span></code> is an API call, this would
+trigger two simultaneous calls to the remote API, which is not
+necessarily a good idea. In order to avoid this, instead of inheriting
+from <code class="docutils literal notranslate"><span class="pre">BaseTrigger</span></code> you can rather implement a <code class="docutils literal notranslate"><span class="pre">SharedTrigger</span></code> which is
+specifically designed for this kind of cases. By example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bernard.engine.triggers</span> <span class="kn">import</span> <span class="n">SharedTrigger</span>
+<span class="kn">from</span> <span class="nn">.api</span> <span class="kn">import</span> <span class="n">custom_check</span>
+
+
+<span class="k">class</span> <span class="nc">ApiCallTrigger</span><span class="p">(</span><span class="n">SharedTrigger</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">expect</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="n">expect</span>
+
+    <span class="n">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">await</span> <span class="n">custom_check</span><span class="p">()</span>
+
+    <span class="n">async</span> <span class="k">def</span> <span class="nf">compute_rank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1.</span> <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">expect</span> <span class="k">else</span> <span class="o">.</span><span class="mi">0</span>
+</pre></div>
+</div>
+<p>In the previous example, <code class="docutils literal notranslate"><span class="pre">custom_check()</span></code> performs the check and returns
+a boolean. The <code class="docutils literal notranslate"><span class="pre">call_api()</span></code> will only be called once.</p>
+<p>Then the <code class="docutils literal notranslate"><span class="pre">compute_rank()</span></code> function will be called with the resulting
+value as many times as the check exists.</p>
+<p>Please note that for this to work, you need to create <code class="docutils literal notranslate"><span class="pre">internal</span></code>
+transitions. By example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">transitions</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Tr</span><span class="p">(</span>
+        <span class="n">dest</span><span class="o">=</span><span class="n">EmptyState</span><span class="p">,</span>
+        <span class="n">factory</span><span class="o">=</span><span class="n">trg</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="s1">&#39;do_stuff&#39;</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">Tr</span><span class="p">(</span>
+        <span class="n">dest</span><span class="o">=</span><span class="n">StateIfTrue</span><span class="p">,</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">EmptyState</span><span class="p">,</span>
+        <span class="n">factory</span><span class="o">=</span><span class="n">ApiCallTrigger</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="n">expect</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+        <span class="n">internal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">Tr</span><span class="p">(</span>
+        <span class="n">dest</span><span class="o">=</span><span class="n">StateIfFalse</span><span class="p">,</span>
+        <span class="n">origin</span><span class="o">=</span><span class="n">EmptyState</span><span class="p">,</span>
+        <span class="n">factory</span><span class="o">=</span><span class="n">ApiCallTrigger</span><span class="o">.</span><span class="n">builder</span><span class="p">(</span><span class="n">expect</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+        <span class="n">internal</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

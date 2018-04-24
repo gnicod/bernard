@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bernard.engine.state &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/readme.html">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/concepts.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/fsm.html">Finite-state Machines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/start.html">Start a project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/number-bot.html">Number Bot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/patterns.html">Patterns</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bernard.engine.state</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bernard.engine.state</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterator</span>
+<span class="kn">from</span> <span class="nn">bernard.core.health_check</span> <span class="k">import</span> <span class="n">HealthCheckFail</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.triggers</span> <span class="k">import</span> <span class="n">BaseTrigger</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">BaseLayer</span><span class="p">,</span> <span class="n">Text</span>
+<span class="kn">from</span> <span class="nn">.responder</span> <span class="k">import</span> <span class="n">Responder</span>
+<span class="kn">from</span> <span class="nn">.request</span> <span class="k">import</span> <span class="n">Request</span>
+
+
+<div class="viewcode-block" id="BaseState"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState">[docs]</a><span class="k">class</span> <span class="nc">BaseState</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the base state interface. When implementing a bot, you need to</span>
+<span class="sd">    implement it.</span>
+
+<span class="sd">    What is advised is to create your own base class for your bot, so it can</span>
+<span class="sd">    have a default `error()` and `confused()` behaviour, and then inherit</span>
+<span class="sd">    this class from everywhere. This base subclass can then become the</span>
+<span class="sd">    `DEFAULT_STATE` in the configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+                 <span class="n">responder</span><span class="p">:</span> <span class="n">Responder</span><span class="p">,</span>
+                 <span class="n">trigger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseTrigger</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">responder</span> <span class="o">=</span> <span class="n">responder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigger</span> <span class="o">=</span> <span class="n">trigger</span>
+
+<div class="viewcode-block" id="BaseState.name"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState.name">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate a unique name for this state based on its fully qualified</span>
+<span class="sd">        name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseState.health_check"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState.health_check">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">health_check</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">HealthCheckFail</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform checks of the state itself. So far:</span>
+
+<span class="sd">        - For each method of the class, check for the presence of a</span>
+<span class="sd">          health_check() method. If the method is present then call it. This is</span>
+<span class="sd">          used to allow the context decorator to make some checks on the</span>
+<span class="sd">          structure of the class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;health_check&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">callable</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">health_check</span><span class="p">):</span>
+                <span class="k">async</span> <span class="k">for</span> <span class="n">check</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">health_check</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">check</span></div>
+
+<div class="viewcode-block" id="BaseState.error"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState.error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is what happens when the code screws up (aka error 500).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseState.confused"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState.confused">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">confused</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is called when a good state cannot be found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseState.handle"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState.handle">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        That&#39;s the regular state handling method that gets called when all</span>
+<span class="sd">        goes well. You need to overload this one and reply your things to the</span>
+<span class="sd">        user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseState.send"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">stack</span><span class="p">:</span> <span class="n">BaseLayer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shortcut method to send a reply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">responder</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">stack</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="DefaultState"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.DefaultState">[docs]</a><span class="k">class</span> <span class="nc">DefaultState</span><span class="p">(</span><span class="n">BaseState</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    That&#39;s the default default state. You really need to make your own default</span>
+<span class="sd">    state but this one here is created so not everything crashes if you forget</span>
+<span class="sd">    to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DefaultState.handle"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.DefaultState.handle">[docs]</a>    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Let&#39;s not handle things.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="DefaultState.confused"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.DefaultState.confused">[docs]</a>    <span class="k">def</span> <span class="nf">confused</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a stupid text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s1">&#39;I do not understand this text&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DefaultState.error"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.DefaultState.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send another stupid text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s1">&#39;Something went wrong in my head and I cannot answer&#39;</span><span class="p">))</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,408 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bernard.engine.platform &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/readme.html">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/concepts.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/fsm.html">Finite-state Machines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/start.html">Start a project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/number-bot.html">Number Bot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/patterns.html">Patterns</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bernard.engine.platform</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bernard.engine.platform</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Coroutine</span>
+
+<span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">from</span> <span class="nn">aiohttp.web_urldispatcher</span> <span class="k">import</span> <span class="n">UrlDispatcher</span>
+
+<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.responder</span> <span class="k">import</span> <span class="n">Responder</span><span class="p">,</span> <span class="n">UnacceptableStack</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">Stack</span>
+<span class="kn">from</span> <span class="nn">bernard.media.base</span> <span class="k">import</span> <span class="n">BaseMedia</span>
+<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="n">import_class</span>
+<span class="kn">from</span> <span class="nn">.request</span> <span class="k">import</span> <span class="n">BaseMessage</span>
+
+
+<span class="n">MessageCallback</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">BaseMessage</span><span class="p">,</span> <span class="n">Responder</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Platform"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform">[docs]</a><span class="k">class</span> <span class="nc">Platform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for the platforms. You need to overload it in order to create</span>
+<span class="sd">    your own platform.</span>
+
+<span class="sd">    To create a new platform, you need two things:</span>
+
+<span class="sd">        - Call `_notify()` when you receive a message from the platform</span>
+<span class="sd">        - Implement `accept()`</span>
+
+<span class="sd">    The `fsm_creates_task` attribute indicates one of two work modes:</span>
+
+<span class="sd">        - True: the callbacks are in charge of starting their own tasks</span>
+<span class="sd">        - False: the callbacks will be awaited. Also, the return value of the</span>
+<span class="sd">          last callback will be stored in `_register`. This mode is created</span>
+<span class="sd">          for unit tests.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NAME</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">fsm_creates_task</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listeners</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># type: List[MessageCallback]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Platform.settings"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform.settings">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">settings</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find the settings for the current class inside the platforms</span>
+<span class="sd">        configuration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="kn">from</span> <span class="nn">bernard.platforms.management</span> <span class="k">import</span> <span class="n">get_platform_settings</span>
+
+        <span class="k">for</span> <span class="n">platform</span> <span class="ow">in</span> <span class="n">get_platform_settings</span><span class="p">():</span>
+            <span class="n">candidate</span> <span class="o">=</span> <span class="n">import_class</span><span class="p">(</span><span class="n">platform</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">candidate</span> <span class="o">==</span> <span class="bp">cls</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">platform</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;settings&#39;</span><span class="p">,</span> <span class="p">{})</span></div>
+
+<div class="viewcode-block" id="Platform.on_message"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform.on_message">[docs]</a>    <span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="p">:</span> <span class="n">MessageCallback</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register a callback to listen for incoming messages.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_listeners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">BaseMessage</span><span class="p">,</span> <span class="n">responder</span><span class="p">:</span> <span class="n">Responder</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Notify all callbacks that a message was received.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_listeners</span><span class="p">:</span>
+            <span class="n">coro</span> <span class="o">=</span> <span class="n">cb</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">responder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fsm_creates_task</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fsm_creates_task</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_register</span> <span class="o">=</span> <span class="k">await</span> <span class="n">coro</span>
+
+<div class="viewcode-block" id="Platform.accept"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform.accept">[docs]</a>    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">Stack</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return True if the platform can accept the stack provided as argument,</span>
+<span class="sd">        and False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Platform.send"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform.send">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">Stack</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a stack to the user</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Platform.ensure_usable_media"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform.ensure_usable_media">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">ensure_usable_media</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">media</span><span class="p">:</span> <span class="n">BaseMedia</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseMedia</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Ensure that the media passed as argument can be used to send on the</span>
+<span class="sd">        platform.</span>
+
+<span class="sd">        If the media is already usable, it is returned as-is.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="Platform.self_check"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform.self_check">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">self_check</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the self health-check. This one is a dummy one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[]:</span>
+            <span class="k">yield</span></div>
+
+<div class="viewcode-block" id="Platform.hook_up"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.Platform.hook_up">[docs]</a>    <span class="k">def</span> <span class="nf">hook_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">router</span><span class="p">:</span> <span class="n">UrlDispatcher</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is where the platform can register its routes (for the hooks and</span>
+<span class="sd">        so on).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="SimplePlatform"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.SimplePlatform">[docs]</a><span class="k">class</span> <span class="nc">SimplePlatform</span><span class="p">(</span><span class="n">Platform</span><span class="p">):</span>
+    <span class="n">PATTERNS</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SimplePlatform</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="SimplePlatform.async_init"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.SimplePlatform.async_init">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">async_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        During async init we just need to create a HTTP session so we can keep</span>
+<span class="sd">        outgoing connexions to the platform alive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_deferred_init</span><span class="p">())</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_deferred_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run those things in a sepearate tasks as they are not required for the</span>
+<span class="sd">        bot to work and they take a lot of time to run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="SimplePlatform.accept"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.SimplePlatform.accept">[docs]</a>    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">Stack</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks that the stack can be accepted according to the `PATTERNS`.</span>
+
+<span class="sd">        If the pattern is found, then its name is stored in the `annotation`</span>
+<span class="sd">        attribute of the stack.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PATTERNS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">stack</span><span class="o">.</span><span class="n">match_exp</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+                <span class="n">stack</span><span class="o">.</span><span class="n">annotation</span> <span class="o">=</span> <span class="n">name</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SimplePlatform.send"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.SimplePlatform.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">Stack</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Coroutine</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Send a stack to the platform.</span>
+
+<span class="sd">        Actually this will delegate to one of the `_send_*` functions depending</span>
+<span class="sd">        on what the stack looks like.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">stack</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PATTERNS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">stack</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">UnacceptableStack</span><span class="p">(</span><span class="s1">&#39;Cannot accept stack </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">stack</span><span class="p">))</span>
+
+        <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_send_&#39;</span> <span class="o">+</span> <span class="n">stack</span><span class="o">.</span><span class="n">annotation</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">stack</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SimplePlatform.ensure_usable_media"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.SimplePlatform.ensure_usable_media">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_usable_media</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">media</span><span class="p">:</span> <span class="n">BaseMedia</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseMedia</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+
+
+<div class="viewcode-block" id="PlatformError"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.PlatformError">[docs]</a><span class="k">class</span> <span class="nc">PlatformError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base platform error</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="PlatformDoesNotExist"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.PlatformDoesNotExist">[docs]</a><span class="k">class</span> <span class="nc">PlatformDoesNotExist</span><span class="p">(</span><span class="n">PlatformError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Happens when a non-existing platform is asked for initialization</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="PlatformOperationError"><a class="viewcode-back" href="../../../api.html#bernard.engine.platform.PlatformOperationError">[docs]</a><span class="k">class</span> <span class="nc">PlatformOperationError</span><span class="p">(</span><span class="n">PlatformError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An operation on the platform failed</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

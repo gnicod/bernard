@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Start a project &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Start a project</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/get-started/start.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="start-a-project">
+<span id="start-a-project"></span><h1>Start a project<a class="headerlink" href="#start-a-project" title="Permalink to this headline">¶</a></h1>
+<p>BERNARD has a built-in template that can be used to start a new project.
+Onces that you have <a class="reference external" href="./install.md">installed</a> the <code class="docutils literal notranslate"><span class="pre">bernard</span></code> package, you
+can use it like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bernard start_project proj_name ~/dev/proj_name
+</pre></div>
+</div>
+<p>This will automatically create a simplet emplate for a project named
+<code class="docutils literal notranslate"><span class="pre">proj_name</span></code> in the directory <code class="docutils literal notranslate"><span class="pre">~/dev/proj_name</span></code>.</p>
+<p>Please note the following requirements:</p>
+<ul class="simple">
+<li>The project name is expected to be a valid lower-case and snake-case
+Python variable name.</li>
+<li>The target directory must be empty or contain only hidden files.</li>
+</ul>
+<div class="section" id="project-structure">
+<span id="project-structure"></span><h2>Project structure<a class="headerlink" href="#project-structure" title="Permalink to this headline">¶</a></h2>
+<p>The created project will have a few files that you can customize. While
+we will not explain what <code class="docutils literal notranslate"><span class="pre">.editorconfig</span></code>, <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>,
+<code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">README.md</span></code> do, we will dive into
+BERNARD-specific files.</p>
+<div class="section" id="manage-py">
+<span id="manage-py"></span><h3><code class="docutils literal notranslate"><span class="pre">manage.py</span></code><a class="headerlink" href="#manage-py" title="Permalink to this headline">¶</a></h3>
+<p>This is an alias to the <code class="docutils literal notranslate"><span class="pre">bernard</span></code> command with one subtle difference:
+the <code class="docutils literal notranslate"><span class="pre">BERNARD_SETTINGS_FILE</span></code> environment variable is set automatically.
+That can be useful depending on how you configure your project and if
+you use environment variables to do so.</p>
+</div>
+<div class="section" id="env">
+<span id="env"></span><h3><code class="docutils literal notranslate"><span class="pre">env</span></code><a class="headerlink" href="#env" title="Permalink to this headline">¶</a></h3>
+<p>That’s a sample environment file. You can source it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> ./env
+</pre></div>
+</div>
+<p>This will automatically load the default config. You need to update it
+with configuration values that suit your needs.</p>
+<p>The “Env File” PyCharm plugin can be used to automatically read this
+file in each run environment.</p>
+</div>
+<div class="section" id="src-proj-name-settings-py">
+<span id="src-proj-name-settings-py"></span><h3><code class="docutils literal notranslate"><span class="pre">src/proj_name/settings.py</span></code><a class="headerlink" href="#src-proj-name-settings-py" title="Permalink to this headline">¶</a></h3>
+<p>Here are the settings of the project. Settings can be accessed from
+anywhere in the code by doing this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MY_SETTING</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The configuration file is evaluated in a sandbox at startup time. You
+can put logic in there, but do not ever import it directly from BERNARD
+or reciprocically.</p>
+<p>All variables with an uppercase name will be imported into <code class="docutils literal notranslate"><span class="pre">settings</span></code>,
+however lowercase variables will not be available.</p>
+</div>
+<div class="section" id="src-proj-name-states-py">
+<span id="src-proj-name-states-py"></span><h3><code class="docutils literal notranslate"><span class="pre">src/proj_name/states.py</span></code><a class="headerlink" href="#src-proj-name-states-py" title="Permalink to this headline">¶</a></h3>
+<p>In this file you can find your default state as well as all the states
+of your bot that you will develop.</p>
+</div>
+<div class="section" id="src-proj-name-transitions-py">
+<span id="src-proj-name-transitions-py"></span><h3><code class="docutils literal notranslate"><span class="pre">src/proj_name/transitions.py</span></code><a class="headerlink" href="#src-proj-name-transitions-py" title="Permalink to this headline">¶</a></h3>
+<p>The transitions file has all the triggers of the bot. It’s the starting
+point of the framework, which will read it to discover both transitions
+and states.</p>
+</div>
+</div>
+<div class="section" id="wrap-up">
+<span id="wrap-up"></span><h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Permalink to this headline">¶</a></h2>
+<p>There is a <code class="docutils literal notranslate"><span class="pre">bernard</span> <span class="pre">start_project</span></code> command that allows to quickly create
+a project from a simple template. It has all the basic files required
+to make a BERNARD project.</p>
+<p><strong>Next step</strong>: <a class="reference external" href="./number-bot.md">number bot</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

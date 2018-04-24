@@ -1,0 +1,1611 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Patterns" href="get-started/patterns.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get-started/readme.html">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-started/concepts.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-started/fsm.html">Finite-state Machines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-started/start.html">Start a project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-started/number-bot.html">Number Bot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get-started/patterns.html">Patterns</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#engine">Engine</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.engine.fsm">FSM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.engine.platform">Platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.engine.request">Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.engine.responder">Responder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.engine.state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.engine.transition">Transition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#triggers">Triggers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#i18n">I18n</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.i18n.intents">Intents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#platforms">Platforms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.platforms.telegram.platform">Telegram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.platforms.facebook.platform">Facebook</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#media">Media</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reporter">Reporter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.reporter._base">_base</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.reporter._raven">_raven</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#middleware">Middleware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.middleware._builtins">_buitins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-bernard.middleware._manager">_manager</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-bernard.trigram">Trigram</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api">
+<span id="id1"></span><h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="engine">
+<h2>Engine<a class="headerlink" href="#engine" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-bernard.engine.fsm">
+<span id="fsm"></span><h3>FSM<a class="headerlink" href="#module-bernard.engine.fsm" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.engine.fsm.FSM">
+<em class="property">class </em><code class="descclassname">bernard.engine.fsm.</code><code class="descname">FSM</code><a class="reference internal" href="_modules/bernard/engine/fsm.html#FSM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.fsm.FSM" title="Permalink to this definition">¶</a></dt>
+<dd><p>The FSM is the core of the engine. FSM as in “Finite-State Machine”.</p>
+<p>Bots are represented as a FSM: states are the various states of the but,
+and each state handler sends messages to the user. Transitions are
+triggered by events from the user (or crons, or whatever).</p>
+<p>There is a transitions file that describes all possible transitions. When
+an event occurs, all transitions are polled to see if a trigger emerges.</p>
+<p>For each conversation, there is a register of the current state.</p>
+<dl class="method">
+<dt id="bernard.engine.fsm.FSM.async_init">
+<code class="descname">async_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/fsm.html#FSM.async_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.fsm.FSM.async_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>THe register might need to be initialized in a loop</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.fsm.FSM.handle_message">
+<code class="descname">handle_message</code><span class="sig-paren">(</span><em>message: bernard.engine.request.BaseMessage</em>, <em>responder: bernard.engine.responder.Responder</em>, <em>create_task: True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/fsm.html#FSM.handle_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.fsm.FSM.handle_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Public method to handle a message. It requires:</p>
+<blockquote>
+<div><ul class="simple">
+<li>A message from the platform</li>
+<li>A responder from the platform</li>
+</ul>
+</div></blockquote>
+<p>If <cite>create_task</cite> is true, them the task will automatically be added to
+the loop. However, if it is not, the coroutine will be returned and it
+will be the responsibility of the caller to run/start the task.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.fsm.FSM.health_check">
+<code class="descname">health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Iterator[bernard.core.health_check.HealthCheckFail]<a class="reference internal" href="_modules/bernard/engine/fsm.html#FSM.health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.fsm.FSM.health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the checks. So far:</p>
+<ul class="simple">
+<li>Make a list of the unique destination states from the transitions
+list, then check the health of each of them.</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="bernard.engine.fsm.FsmError">
+<em class="property">exception </em><code class="descclassname">bernard.engine.fsm.</code><code class="descname">FsmError</code><a class="reference internal" href="_modules/bernard/engine/fsm.html#FsmError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.fsm.FsmError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base FSM exception</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="bernard.engine.fsm.MaxInternalJump">
+<em class="property">exception </em><code class="descclassname">bernard.engine.fsm.</code><code class="descname">MaxInternalJump</code><a class="reference internal" href="_modules/bernard/engine/fsm.html#MaxInternalJump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.fsm.MaxInternalJump" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s when the max number of internal jumps is reached</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.engine.platform">
+<span id="platform"></span><h3>Platform<a class="headerlink" href="#module-bernard.engine.platform" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.engine.platform.Platform">
+<em class="property">class </em><code class="descclassname">bernard.engine.platform.</code><code class="descname">Platform</code><a class="reference internal" href="_modules/bernard/engine/platform.html#Platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for the platforms. You need to overload it in order to create
+your own platform.</p>
+<p>To create a new platform, you need two things:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Call <cite>_notify()</cite> when you receive a message from the platform</li>
+<li>Implement <cite>accept()</cite></li>
+</ul>
+</div></blockquote>
+<p>The <cite>fsm_creates_task</cite> attribute indicates one of two work modes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>True: the callbacks are in charge of starting their own tasks</li>
+<li>False: the callbacks will be awaited. Also, the return value of the
+last callback will be stored in <cite>_register</cite>. This mode is created
+for unit tests.</li>
+</ul>
+</div></blockquote>
+<dl class="method">
+<dt id="bernard.engine.platform.Platform.accept">
+<code class="descname">accept</code><span class="sig-paren">(</span><em>stack: bernard.layers.stack.Stack</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/platform.html#Platform.accept"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform.accept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if the platform can accept the stack provided as argument,
+and False otherwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.platform.Platform.ensure_usable_media">
+<code class="descname">ensure_usable_media</code><span class="sig-paren">(</span><em>media: bernard.media.base.BaseMedia</em><span class="sig-paren">)</span> &#x2192; bernard.media.base.BaseMedia<a class="reference internal" href="_modules/bernard/engine/platform.html#Platform.ensure_usable_media"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform.ensure_usable_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the media passed as argument can be used to send on the
+platform.</p>
+<p>If the media is already usable, it is returned as-is.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.platform.Platform.hook_up">
+<code class="descname">hook_up</code><span class="sig-paren">(</span><em>router: aiohttp.web_urldispatcher.UrlDispatcher</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/platform.html#Platform.hook_up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform.hook_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is where the platform can register its routes (for the hooks and
+so on).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.platform.Platform.on_message">
+<code class="descname">on_message</code><span class="sig-paren">(</span><em>cb: Callable[[bernard.engine.request.BaseMessage, bernard.engine.responder.Responder, bool], NoneType]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/platform.html#Platform.on_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform.on_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a callback to listen for incoming messages.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.engine.platform.Platform.self_check">
+<em class="property">classmethod </em><code class="descname">self_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/platform.html#Platform.self_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform.self_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the self health-check. This one is a dummy one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.platform.Platform.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>stack: bernard.layers.stack.Stack</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/platform.html#Platform.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a stack to the user</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.engine.platform.Platform.settings">
+<em class="property">classmethod </em><code class="descname">settings</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/platform.html#Platform.settings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.Platform.settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the settings for the current class inside the platforms
+configuration.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="bernard.engine.platform.PlatformDoesNotExist">
+<em class="property">exception </em><code class="descclassname">bernard.engine.platform.</code><code class="descname">PlatformDoesNotExist</code><a class="reference internal" href="_modules/bernard/engine/platform.html#PlatformDoesNotExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.PlatformDoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Happens when a non-existing platform is asked for initialization</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="bernard.engine.platform.PlatformError">
+<em class="property">exception </em><code class="descclassname">bernard.engine.platform.</code><code class="descname">PlatformError</code><a class="reference internal" href="_modules/bernard/engine/platform.html#PlatformError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.PlatformError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base platform error</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="bernard.engine.platform.PlatformOperationError">
+<em class="property">exception </em><code class="descclassname">bernard.engine.platform.</code><code class="descname">PlatformOperationError</code><a class="reference internal" href="_modules/bernard/engine/platform.html#PlatformOperationError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.PlatformOperationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>An operation on the platform failed</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.platform.SimplePlatform">
+<em class="property">class </em><code class="descclassname">bernard.engine.platform.</code><code class="descname">SimplePlatform</code><a class="reference internal" href="_modules/bernard/engine/platform.html#SimplePlatform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.SimplePlatform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="bernard.engine.platform.SimplePlatform.accept">
+<code class="descname">accept</code><span class="sig-paren">(</span><em>stack: bernard.layers.stack.Stack</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/platform.html#SimplePlatform.accept"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.SimplePlatform.accept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the stack can be accepted according to the <cite>PATTERNS</cite>.</p>
+<p>If the pattern is found, then its name is stored in the <cite>annotation</cite>
+attribute of the stack.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.platform.SimplePlatform.async_init">
+<code class="descname">async_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/platform.html#SimplePlatform.async_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.SimplePlatform.async_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>During async init we just need to create a HTTP session so we can keep
+outgoing connexions to the platform alive.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.platform.SimplePlatform.ensure_usable_media">
+<code class="descname">ensure_usable_media</code><span class="sig-paren">(</span><em>media: bernard.media.base.BaseMedia</em><span class="sig-paren">)</span> &#x2192; bernard.media.base.BaseMedia<a class="reference internal" href="_modules/bernard/engine/platform.html#SimplePlatform.ensure_usable_media"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.SimplePlatform.ensure_usable_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the media passed as argument can be used to send on the
+platform.</p>
+<p>If the media is already usable, it is returned as-is.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.platform.SimplePlatform.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>stack: bernard.layers.stack.Stack</em><span class="sig-paren">)</span> &#x2192; Coroutine<a class="reference internal" href="_modules/bernard/engine/platform.html#SimplePlatform.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.platform.SimplePlatform.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a stack to the platform.</p>
+<p>Actually this will delegate to one of the <cite>_send_*</cite> functions depending
+on what the stack looks like.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.engine.request">
+<span id="request"></span><h3>Request<a class="headerlink" href="#module-bernard.engine.request" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.engine.request.BaseMessage">
+<em class="property">class </em><code class="descclassname">bernard.engine.request.</code><code class="descname">BaseMessage</code><a class="reference internal" href="_modules/bernard/engine/request.html#BaseMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.BaseMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents a message received by the platform. It is in charge
+of implementing the following abstract methods from what the platform
+can provide.</p>
+<p>The methods here should, in principle, only get called once. Though it’s
+not guaranteed.</p>
+<dl class="method">
+<dt id="bernard.engine.request.BaseMessage.get_conversation">
+<code class="descname">get_conversation</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.engine.request.Conversation<a class="reference internal" href="_modules/bernard/engine/request.html#BaseMessage.get_conversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.BaseMessage.get_conversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a conversation object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.BaseMessage.get_layers">
+<code class="descname">get_layers</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[bernard.layers.definitions.BaseLayer]<a class="reference internal" href="_modules/bernard/engine/request.html#BaseMessage.get_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.BaseMessage.get_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the layers found in the message.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.BaseMessage.get_platform">
+<code class="descname">get_platform</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#BaseMessage.get_platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.BaseMessage.get_platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a static string indicating the name of the platform that this
+message comes from.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.BaseMessage.get_user">
+<code class="descname">get_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.engine.request.User<a class="reference internal" href="_modules/bernard/engine/request.html#BaseMessage.get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.BaseMessage.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a user object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.BaseMessage.should_confuse">
+<code class="descname">should_confuse</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/bernard/engine/request.html#BaseMessage.should_confuse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.BaseMessage.should_confuse" title="Permalink to this definition">¶</a></dt>
+<dd><p>If this returns “True” then the message should trigger a confused state
+when not understood.</p>
+<p>Otherwise, it is simply ignored.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.request.Conversation">
+<em class="property">class </em><code class="descclassname">bernard.engine.request.</code><code class="descname">Conversation</code><span class="sig-paren">(</span><em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/request.html#Conversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Conversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract representation of a conversation.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.request.Request">
+<em class="property">class </em><code class="descclassname">bernard.engine.request.</code><code class="descname">Request</code><span class="sig-paren">(</span><em>message: bernard.engine.request.BaseMessage</em>, <em>register: bernard.storage.register.base.Register</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/request.html#Request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request" title="Permalink to this definition">¶</a></dt>
+<dd><p>The request object is generated after each message. Its goal is to provide
+a comprehensive access to the received message and its context to be used
+by the transitions and the handlers.</p>
+<dl class="method">
+<dt id="bernard.engine.request.Request.get_layer">
+<code class="descname">get_layer</code><span class="sig-paren">(</span><em>class_: Type[L], became: bool = True</em><span class="sig-paren">)</span> &#x2192; L<a class="reference internal" href="_modules/bernard/engine/request.html#Request.get_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.get_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy to stack</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.Request.get_layers">
+<code class="descname">get_layers</code><span class="sig-paren">(</span><em>class_: Type[L], became: bool = True</em><span class="sig-paren">)</span> &#x2192; List[L]<a class="reference internal" href="_modules/bernard/engine/request.html#Request.get_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.get_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy to stack</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.Request.get_locale">
+<code class="descname">get_locale</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#Request.get_locale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.get_locale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the locale to use for this request. It’s either the overriden locale
+or the locale provided by the platform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Locale to use for this request</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.Request.get_trans_flags">
+<code class="descname">get_trans_flags</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Flags<a class="reference internal" href="_modules/bernard/engine/request.html#Request.get_trans_flags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.get_trans_flags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives a chance to middlewares to make the translation flags</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.Request.get_trans_reg">
+<code class="descname">get_trans_reg</code><span class="sig-paren">(</span><em>name: str</em>, <em>default: Any = None</em><span class="sig-paren">)</span> &#x2192; Any<a class="reference internal" href="_modules/bernard/engine/request.html#Request.get_trans_reg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.get_trans_reg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function to access the transition register of a specific
+kind.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> – Name of the register you want to see</li>
+<li><strong>default</strong> – What to return by default</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.Request.has_layer">
+<code class="descname">has_layer</code><span class="sig-paren">(</span><em>class_: Type[L], became: bool = True</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/bernard/engine/request.html#Request.has_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.has_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy to stack</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.Request.set_locale_override">
+<code class="descname">set_locale_override</code><span class="sig-paren">(</span><em>locale: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/request.html#Request.set_locale_override"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.set_locale_override" title="Permalink to this definition">¶</a></dt>
+<dd><p>This allows to override manually the locale that will be used in
+replies.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>locale</strong> – Name of the locale (format ‘fr’ or ‘fr_FR’)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.request.User">
+<em class="property">class </em><code class="descclassname">bernard.engine.request.</code><code class="descname">User</code><span class="sig-paren">(</span><em>id_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/request.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract representation of a user.</p>
+<dl class="class">
+<dt id="bernard.engine.request.User.Gender">
+<em class="property">class </em><code class="descname">Gender</code><a class="reference internal" href="_modules/bernard/engine/request.html#User.Gender"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.Gender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the gender of a person. Unknown is to be used either when
+you actually don’t know or when the gender is more complex than male or
+female.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.User.get_formal_name">
+<code class="descname">get_formal_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#User.get_formal_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.get_formal_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a formal name (like in “Howdy Mr Sanchez”)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.User.get_friendly_name">
+<code class="descname">get_friendly_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#User.get_friendly_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.get_friendly_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a friendly name (like in “Hi Rémy”)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.User.get_full_name">
+<code class="descname">get_full_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#User.get_full_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.get_full_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes an administrative full name (like “Name: Rémy Sanchez”)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.User.get_gender">
+<code class="descname">get_gender</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.engine.request.User.Gender<a class="reference internal" href="_modules/bernard/engine/request.html#User.get_gender"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.get_gender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the gender of the person if known</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.User.get_locale">
+<code class="descname">get_locale</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#User.get_locale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.get_locale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a locale-descripting string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.User.get_postback_url">
+<code class="descname">get_postback_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#User.get_postback_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.get_postback_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a URL which can be POSTed to. The POST body must be a JSON
+message that will be used as payload for a synthetic postback layer
+from this user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.request.User.get_timezone">
+<code class="descname">get_timezone</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[datetime.tzinfo, NoneType]<a class="reference internal" href="_modules/bernard/engine/request.html#User.get_timezone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.User.get_timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current time zone of the user</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.engine.responder">
+<span id="responder"></span><h3>Responder<a class="headerlink" href="#module-bernard.engine.responder" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.engine.responder.Responder">
+<em class="property">class </em><code class="descclassname">bernard.engine.responder.</code><code class="descname">Responder</code><span class="sig-paren">(</span><em>platform: Platform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/responder.html#Responder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.responder.Responder" title="Permalink to this definition">¶</a></dt>
+<dd><p>The responder is the abstract object that allows to talk back to the
+conversation.</p>
+<p>If you implement a platform, you can overload this class but you probably
+won’t need to change anything.</p>
+<dl class="method">
+<dt id="bernard.engine.responder.Responder.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/responder.html#Responder.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.responder.Responder.clear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the send list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.responder.Responder.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><em>request: Request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/responder.html#Responder.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.responder.Responder.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send all queued messages.</p>
+<p>The first step is to convert all media in the stacked layers then the
+second step is to send all messages as grouped in time as possible.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.responder.Responder.make_transition_register">
+<code class="descname">make_transition_register</code><span class="sig-paren">(</span><em>request: Request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/responder.html#Responder.make_transition_register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.responder.Responder.make_transition_register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use all underlying stacks to generate the next transition register.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.responder.Responder.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>stack: Union[bernard.layers.stack.Stack, typing.List[bernard.layers.definitions.BaseLayer]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/responder.html#Responder.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.responder.Responder.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a message stack to the send list.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="bernard.engine.responder.ResponderError">
+<em class="property">exception </em><code class="descclassname">bernard.engine.responder.</code><code class="descname">ResponderError</code><a class="reference internal" href="_modules/bernard/engine/responder.html#ResponderError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.responder.ResponderError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base responder exception</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="bernard.engine.responder.UnacceptableStack">
+<em class="property">exception </em><code class="descclassname">bernard.engine.responder.</code><code class="descname">UnacceptableStack</code><a class="reference internal" href="_modules/bernard/engine/responder.html#UnacceptableStack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.responder.UnacceptableStack" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stack you’re tryping to send can’t be accepted by the platform</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.engine.state">
+<span id="state"></span><h3>State<a class="headerlink" href="#module-bernard.engine.state" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.engine.state.BaseState">
+<em class="property">class </em><code class="descclassname">bernard.engine.state.</code><code class="descname">BaseState</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>responder: bernard.engine.responder.Responder</em>, <em>trigger: Union[bernard.engine.triggers.BaseTrigger</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#BaseState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the base state interface. When implementing a bot, you need to
+implement it.</p>
+<p>What is advised is to create your own base class for your bot, so it can
+have a default <cite>error()</cite> and <cite>confused()</cite> behaviour, and then inherit
+this class from everywhere. This base subclass can then become the
+<cite>DEFAULT_STATE</cite> in the configuration.</p>
+<dl class="method">
+<dt id="bernard.engine.state.BaseState.confused">
+<code class="descname">confused</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/state.html#BaseState.confused"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState.confused" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is called when a good state cannot be found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.state.BaseState.error">
+<code class="descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/state.html#BaseState.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is what happens when the code screws up (aka error 500).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.state.BaseState.handle">
+<code class="descname">handle</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/state.html#BaseState.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the regular state handling method that gets called when all
+goes well. You need to overload this one and reply your things to the
+user.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.engine.state.BaseState.health_check">
+<em class="property">classmethod </em><code class="descname">health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Iterator[bernard.core.health_check.HealthCheckFail]<a class="reference internal" href="_modules/bernard/engine/state.html#BaseState.health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState.health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform checks of the state itself. So far:</p>
+<ul class="simple">
+<li>For each method of the class, check for the presence of a
+health_check() method. If the method is present then call it. This is
+used to allow the context decorator to make some checks on the
+structure of the class.</li>
+</ul>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.engine.state.BaseState.name">
+<em class="property">classmethod </em><code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#BaseState.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a unique name for this state based on its fully qualified
+name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.state.BaseState.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>*stack</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#BaseState.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shortcut method to send a reply.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.state.DefaultState">
+<em class="property">class </em><code class="descclassname">bernard.engine.state.</code><code class="descname">DefaultState</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>responder: bernard.engine.responder.Responder</em>, <em>trigger: Union[bernard.engine.triggers.BaseTrigger</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#DefaultState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.DefaultState" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the default default state. You really need to make your own default
+state but this one here is created so not everything crashes if you forget
+to.</p>
+<dl class="method">
+<dt id="bernard.engine.state.DefaultState.confused">
+<code class="descname">confused</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/state.html#DefaultState.confused"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.DefaultState.confused" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a stupid text.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.state.DefaultState.error">
+<code class="descname">error</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/state.html#DefaultState.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.DefaultState.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send another stupid text.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.state.DefaultState.handle">
+<code class="descname">handle</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/engine/state.html#DefaultState.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.DefaultState.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Let’s not handle things.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.engine.transition">
+<span id="transition"></span><h3>Transition<a class="headerlink" href="#module-bernard.engine.transition" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.engine.transition.Transition">
+<em class="property">class </em><code class="descclassname">bernard.engine.transition.</code><code class="descname">Transition</code><span class="sig-paren">(</span><em>dest: Type[bernard.engine.state.BaseState], factory, origin: Type[bernard.engine.state.BaseState] = None, weight: float = 1.0, desc: str = '', internal: bool = False, do_not_register: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/transition.html#Transition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.transition.Transition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes a specific transition from one state to the other, with the
+trigger in charge.</p>
+<dl class="method">
+<dt id="bernard.engine.transition.Transition.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><em>request, origin: Union[str, NoneType]</em><span class="sig-paren">)</span> &#x2192; Tuple[[float, Union[bernard.engine.triggers.BaseTrigger, NoneType], Union[type, NoneType]], Union[bool, NoneType]]<a class="reference internal" href="_modules/bernard/engine/transition.html#Transition.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.transition.Transition.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the rank of this transition for a given request.</p>
+<p>It returns (in order):</p>
+<blockquote>
+<div><ul class="simple">
+<li>The score (from 0 to 1)</li>
+<li>The trigger instance (if it matched)</li>
+<li>The class of the destination state (if matched)</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="triggers">
+<h3>Triggers<a class="headerlink" href="#triggers" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-bernard.engine.triggers"></span><dl class="class">
+<dt id="bernard.engine.triggers.Action">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">Action</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>action: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Action"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggered by “actions”. An action is a postback message with a “action”
+field in its payload. This trigger simply matches actions on text.</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.Action.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[float, NoneType]<a class="reference internal" href="_modules/bernard/engine/triggers.html#Action.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Action.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the current request, ranks on a scale from 0 to 1 how likely it
+is that this trigger matches it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.Anything">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">Anything</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Anything"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Anything" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trigger that will always match</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.Anything.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Anything.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Anything.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Always return 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.BaseSlugTrigger">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">BaseSlugTrigger</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>slug: Union[bernard.engine.triggers.Text</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#BaseSlugTrigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.BaseSlugTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Common type for slug-based classes that would have exactly the same code
+otherwise.</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.BaseSlugTrigger.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[float, NoneType]<a class="reference internal" href="_modules/bernard/engine/triggers.html#BaseSlugTrigger.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.BaseSlugTrigger.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the current request, ranks on a scale from 0 to 1 how likely it
+is that this trigger matches it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.Choice">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">Choice</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>when: Union[str</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers when the user does a choice.</p>
+<p>Choices are read from the transitions register.</p>
+<p>This trigger has two attributes: <cite>slug</cite> is the slug of choice made and
+<cite>chosen</cite> is the meta-info about this choice (text and intent).</p>
+<p>The optional <cite>when</cite> argument allows to limit matching to a single choice.</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.Choice.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Choice.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Choice.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try to find a choice in what the user did:</p>
+<ul class="simple">
+<li>If there is a quick reply, then use its payload as choice slug</li>
+<li>Otherwise, try to match each choice with its intent</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.CloseWebview">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">CloseWebview</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>slug: Union[bernard.engine.triggers.Text</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#CloseWebview"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.CloseWebview" title="Permalink to this definition">¶</a></dt>
+<dd><p>This layer is triggered by the user closing a webview.</p>
+<dl class="attribute">
+<dt id="bernard.engine.triggers.CloseWebview.LAYER_TYPE">
+<code class="descname">LAYER_TYPE</code><a class="headerlink" href="#bernard.engine.triggers.CloseWebview.LAYER_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">bernard.layers.definitions.CloseWebview</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.Equal">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">Equal</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>layer: bernard.layers.definitions.BaseLayer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Equal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if, in the received layers, there is one layer that is equal to the
+provided layer.</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.Equal.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Equal.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Equal.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the current request, ranks on a scale from 0 to 1 how likely it
+is that this trigger matches it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.Layer">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">Layer</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request, layer_type: Type[bernard.layers.definitions.BaseLayer]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets triggered when the message contains a specific layer</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.Layer.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[float, NoneType]<a class="reference internal" href="_modules/bernard/engine/triggers.html#Layer.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Layer.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simply test the presence of layer type</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.LinkClick">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">LinkClick</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>slug: Union[bernard.engine.triggers.Text</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#LinkClick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.LinkClick" title="Permalink to this definition">¶</a></dt>
+<dd><p>This layer is triggered by the user clicking on an URL button.</p>
+<dl class="attribute">
+<dt id="bernard.engine.triggers.LinkClick.LAYER_TYPE">
+<code class="descname">LAYER_TYPE</code><a class="headerlink" href="#bernard.engine.triggers.LinkClick.LAYER_TYPE" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">bernard.layers.definitions.LinkClick</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.SharedTrigger">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">SharedTrigger</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#SharedTrigger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sometimes, you have several instances of a trigger calling a web service.
+As you might not want to make useless calls (which could even cause
+consistency issues), this helper class helps to create triggers that will
+share the same call to the remote API.</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.SharedTrigger.call_api">
+<code class="descname">call_api</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="reference internal" href="_modules/bernard/engine/triggers.html#SharedTrigger.call_api"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.call_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>You need to implement here the call to your API. The value it returns
+will be passed to <cite>compute_rank()</cite> later on.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.triggers.SharedTrigger.compute_rank">
+<code class="descname">compute_rank</code><span class="sig-paren">(</span><em>value: Any</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/bernard/engine/triggers.html#SharedTrigger.compute_rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.compute_rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the rank from the cached value from the API call.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bernard.engine.triggers.SharedTrigger.content_key">
+<code class="descname">content_key</code><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.content_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the key used to store the content in the request</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.triggers.SharedTrigger.get_value">
+<code class="descname">get_value</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#SharedTrigger.get_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the value from the API. Make sure to use a lock in order not to
+fetch the value twice at the same time.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bernard.engine.triggers.SharedTrigger.lock">
+<code class="descname">lock</code><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.lock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return and generate if required the lock for this request.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bernard.engine.triggers.SharedTrigger.lock_key">
+<code class="descname">lock_key</code><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.lock_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s the key to store the lock of this trigger</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.engine.triggers.SharedTrigger.name">
+<em class="property">classmethod </em><code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/triggers.html#SharedTrigger.name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a unique name for this class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.engine.triggers.SharedTrigger.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#SharedTrigger.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.SharedTrigger.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the rank based on the (cached) value and on the overriden
+rank computation function.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.Text">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">Text</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>intent: bernard.i18n.intents.Intent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Text" title="Permalink to this definition">¶</a></dt>
+<dd><p>A trigger that will match an intent in a text message</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.Text.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[float, NoneType]<a class="reference internal" href="_modules/bernard/engine/triggers.html#Text.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Text.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there is a text layer inside the request, try to find a matching
+text in the specified intent.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.engine.triggers.Worst">
+<em class="property">class </em><code class="descclassname">bernard.engine.triggers.</code><code class="descname">Worst</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request, triggers: List[Callable[bernard.engine.request.Request, _ForwardRef('BaseTrigger')]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Worst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Worst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run several triggers and only keep the worst one. Queries are not made
+in parallel, and execution stops when 0.0 is reached.</p>
+<p>This allows to put simple conditions first before doing more expensive
+tests.</p>
+<dl class="method">
+<dt id="bernard.engine.triggers.Worst.rank">
+<code class="descname">rank</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/triggers.html#Worst.rank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.triggers.Worst.rank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the current request, ranks on a scale from 0 to 1 how likely it
+is that this trigger matches it.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="i18n">
+<h2>I18n<a class="headerlink" href="#i18n" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-bernard.i18n.intents">
+<span id="intents"></span><h3>Intents<a class="headerlink" href="#module-bernard.i18n.intents" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.i18n.intents.Intent">
+<em class="property">class </em><code class="descclassname">bernard.i18n.intents.</code><code class="descname">Intent</code><span class="sig-paren">(</span><em>db: Union[bernard.i18n.intents.IntentsDb, NoneType], key: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#Intent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.Intent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents an intent to be resolved later.</p>
+<dl class="method">
+<dt id="bernard.i18n.intents.Intent.strings">
+<code class="descname">strings</code><span class="sig-paren">(</span><em>request: Union[_ForwardRef('Request')</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#Intent.strings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.Intent.strings" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the given request, find the list of strings of that intent. If the
+intent does not exist, it will raise a KeyError.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.i18n.intents.IntentsDb">
+<em class="property">class </em><code class="descclassname">bernard.i18n.intents.</code><code class="descname">IntentsDb</code><a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsDb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsDb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database of intents. In the future it will handle different langs but right
+now it only handles one.</p>
+<dl class="method">
+<dt id="bernard.i18n.intents.IntentsDb.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>key: str, locale: Union[str, NoneType]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsDb.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsDb.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single set of intents.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.i18n.intents.IntentsDb.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>new_data: Dict[Union[str, NoneType], Dict[str, List[str]]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsDb.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsDb.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receive an update from the loaders.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.i18n.intents.IntentsMaker">
+<em class="property">class </em><code class="descclassname">bernard.i18n.intents.</code><code class="descname">IntentsMaker</code><span class="sig-paren">(</span><em>db: bernard.i18n.intents.IntentsDb = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsMaker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsMaker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility class to be used as singleton and produce Intents objects easily
+from anywhere in the code.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="platforms">
+<h2>Platforms<a class="headerlink" href="#platforms" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-bernard.platforms.telegram.platform">
+<span id="telegram"></span><h3>Telegram<a class="headerlink" href="#module-bernard.platforms.telegram.platform" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.platforms.telegram.platform.Telegram">
+<em class="property">class </em><code class="descclassname">bernard.platforms.telegram.platform.</code><code class="descname">Telegram</code><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="bernard.platforms.telegram.platform.Telegram.call">
+<code class="descname">call</code><span class="sig-paren">(</span><em>method: str</em>, <em>_ignore: Set[str] = None</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call a telegram method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>_ignore</strong> – List of reasons to ignore</li>
+<li><strong>method</strong> – Name of the method to call</li>
+<li><strong>params</strong> – Dictionary of the parameters to send</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Returns the API response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.Telegram.ensure_usable_media">
+<code class="descname">ensure_usable_media</code><span class="sig-paren">(</span><em>media: bernard.media.base.BaseMedia</em><span class="sig-paren">)</span> &#x2192; bernard.media.base.BaseMedia<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.ensure_usable_media"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.ensure_usable_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensure that the media passed as argument can be used to send on the
+platform.</p>
+<p>If the media is already usable, it is returned as-is.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.Telegram.hook_up">
+<code class="descname">hook_up</code><span class="sig-paren">(</span><em>router: aiohttp.web_urldispatcher.UrlDispatcher</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.hook_up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.hook_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is where the platform can register its routes (for the hooks and
+so on).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.Telegram.make_hook_path">
+<code class="descname">make_hook_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.make_hook_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.make_hook_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the path to the hook URL</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.Telegram.make_url">
+<code class="descname">make_url</code><span class="sig-paren">(</span><em>method</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.make_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.make_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a Telegram URL for this bot.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.Telegram.receive_postback">
+<code class="descname">receive_postback</code><span class="sig-paren">(</span><em>request: aiohttp.web_request.Request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.receive_postback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.receive_postback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle postbacks. A fake Telegram message will be generated and fed to
+the normal process.</p>
+<p>Since postback messages need to be acknowledged in Telegram, the ID
+is voluntarily not set so the Responder knows it’s a fake message and
+thus needs no acknowledgement.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.Telegram.receive_updates">
+<code class="descname">receive_updates</code><span class="sig-paren">(</span><em>request: aiohttp.web_request.Request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.receive_updates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.receive_updates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle updates from Telegram</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.platforms.telegram.platform.Telegram.self_check">
+<em class="property">classmethod </em><code class="descname">self_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#Telegram.self_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.Telegram.self_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that the configuration is correct</p>
+<ul class="simple">
+<li>Presence of “token” in the settings</li>
+<li>Presence of “BERNARD_BASE_URL” in the global configuration</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.telegram.platform.TelegramConversation">
+<em class="property">class </em><code class="descclassname">bernard.platforms.telegram.platform.</code><code class="descname">TelegramConversation</code><span class="sig-paren">(</span><em>chat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramConversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramConversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matches the Telegram “chat” concept</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.telegram.platform.TelegramMessage">
+<em class="property">class </em><code class="descclassname">bernard.platforms.telegram.platform.</code><code class="descname">TelegramMessage</code><span class="sig-paren">(</span><em>update: Dict</em>, <em>telegram: bernard.platforms.telegram.platform.Telegram</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramMessage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramMessage.get_conversation">
+<code class="descname">get_conversation</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.engine.request.Conversation<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramMessage.get_conversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramMessage.get_conversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a conversation object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramMessage.get_layers">
+<code class="descname">get_layers</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[bernard.layers.definitions.BaseLayer]<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramMessage.get_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramMessage.get_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the layers found in the message.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramMessage.get_platform">
+<code class="descname">get_platform</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramMessage.get_platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramMessage.get_platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a static string indicating the name of the platform that this
+message comes from.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramMessage.get_user">
+<code class="descname">get_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.engine.request.User<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramMessage.get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramMessage.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a user object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.telegram.platform.TelegramResponder">
+<em class="property">class </em><code class="descclassname">bernard.platforms.telegram.platform.</code><code class="descname">TelegramResponder</code><span class="sig-paren">(</span><em>update</em>, <em>platform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramResponder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramResponder" title="Permalink to this definition">¶</a></dt>
+<dd><p>This responder handles most of the magic behind Telegram messages
+acknowledgements and so on.</p>
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramResponder.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramResponder.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramResponder.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>If there’s a AnswerCallbackQuery scheduled for reply, place the call
+before actually flushing the buffer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramResponder.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>stack: Union[bernard.layers.stack.Stack, typing.List[bernard.layers.definitions.BaseLayer]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramResponder.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramResponder.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Intercept any potential “AnswerCallbackQuery” before adding the stack
+to the output buffer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.telegram.platform.TelegramUser">
+<em class="property">class </em><code class="descclassname">bernard.platforms.telegram.platform.</code><code class="descname">TelegramUser</code><span class="sig-paren">(</span><em>user</em>, <em>chat</em>, <em>telegram: bernard.platforms.telegram.platform.Telegram</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramUser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramUser" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramUser.get_formal_name">
+<code class="descname">get_formal_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramUser.get_formal_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramUser.get_formal_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a formal name (like in “Howdy Mr Sanchez”)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramUser.get_friendly_name">
+<code class="descname">get_friendly_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramUser.get_friendly_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramUser.get_friendly_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a friendly name (like in “Hi Rémy”)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramUser.get_full_name">
+<code class="descname">get_full_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramUser.get_full_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramUser.get_full_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes an administrative full name (like “Name: Rémy Sanchez”)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramUser.get_locale">
+<code class="descname">get_locale</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramUser.get_locale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramUser.get_locale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a locale-descripting string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramUser.get_postback_url">
+<code class="descname">get_postback_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramUser.get_postback_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramUser.get_postback_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a postback URL for Telegram.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.telegram.platform.TelegramUser.get_timezone">
+<code class="descname">get_timezone</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[datetime.tzinfo, NoneType]<a class="reference internal" href="_modules/bernard/platforms/telegram/platform.html#TelegramUser.get_timezone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.telegram.platform.TelegramUser.get_timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current time zone of the user</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.platforms.facebook.platform">
+<span id="facebook"></span><h3>Facebook<a class="headerlink" href="#module-bernard.platforms.facebook.platform" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.platforms.facebook.platform.Facebook">
+<em class="property">class </em><code class="descclassname">bernard.platforms.facebook.platform.</code><code class="descname">Facebook</code><a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#Facebook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.Facebook" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="bernard.platforms.facebook.platform.Facebook.ensure_usable_media">
+<code class="descname">ensure_usable_media</code><span class="sig-paren">(</span><em>media: bernard.media.base.BaseMedia</em><span class="sig-paren">)</span> &#x2192; bernard.media.base.UrlMedia<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#Facebook.ensure_usable_media"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.Facebook.ensure_usable_media" title="Permalink to this definition">¶</a></dt>
+<dd><p>So far, let’s just accept URL media. We’ll see in the future how it
+goes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.Facebook.get_user">
+<code class="descname">get_user</code><span class="sig-paren">(</span><em>user_id</em>, <em>page_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#Facebook.get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.Facebook.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query a user from the API and return its JSON</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.Facebook.handle_event">
+<code class="descname">handle_event</code><span class="sig-paren">(</span><em>event: bernard.platforms.facebook.platform.FacebookMessage</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#Facebook.handle_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.Facebook.handle_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle an incoming message from Facebook.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.facebook.platform.FacebookConversation">
+<em class="property">class </em><code class="descclassname">bernard.platforms.facebook.platform.</code><code class="descname">FacebookConversation</code><span class="sig-paren">(</span><em>fbid: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookConversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookConversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>That is a Facebook conversation. Some idea as the user.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage">
+<em class="property">class </em><code class="descclassname">bernard.platforms.facebook.platform.</code><code class="descname">FacebookMessage</code><span class="sig-paren">(</span><em>event</em>, <em>facebook</em>, <em>confusing=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decodes the raw JSON sent by Facebook and allow to extract the user and the
+accompanying layers.</p>
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage.get_conversation">
+<code class="descname">get_conversation</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.platforms.facebook.platform.FacebookConversation<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage.get_conversation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage.get_conversation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a Facebook conversation instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage.get_layers">
+<code class="descname">get_layers</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List[bernard.layers.definitions.BaseLayer]<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage.get_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage.get_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all layers that can be found in the message.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage.get_page_id">
+<code class="descname">get_page_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage.get_page_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage.get_page_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>That’s for internal use, extract the Facebook page ID.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage.get_platform">
+<code class="descname">get_platform</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage.get_platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage.get_platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>The platform is always Facebook</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage.get_url_base">
+<code class="descname">get_url_base</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[str, NoneType]<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage.get_url_base"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage.get_url_base" title="Permalink to this definition">¶</a></dt>
+<dd><p>If available, return the URL base</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage.get_user">
+<code class="descname">get_user</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.platforms.facebook.platform.FacebookUser<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage.get_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage.get_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a Facebook user instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookMessage.should_confuse">
+<code class="descname">should_confuse</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookMessage.should_confuse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookMessage.should_confuse" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message is marked confusing or not at init</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.facebook.platform.FacebookResponder">
+<em class="property">class </em><code class="descclassname">bernard.platforms.facebook.platform.</code><code class="descname">FacebookResponder</code><span class="sig-paren">(</span><em>platform: Platform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookResponder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookResponder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Not much to do here</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.platforms.facebook.platform.FacebookUser">
+<em class="property">class </em><code class="descclassname">bernard.platforms.facebook.platform.</code><code class="descname">FacebookUser</code><span class="sig-paren">(</span><em>fbid: str</em>, <em>page_id: str</em>, <em>facebook: bernard.platforms.facebook.platform.Facebook</em>, <em>message: bernard.platforms.facebook.platform.FacebookMessage</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>That is the Facebook user class. So far it just computes the unique user
+ID.</p>
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookUser.get_formal_name">
+<code class="descname">get_formal_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser.get_formal_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser.get_formal_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Let’s implement this later</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookUser.get_friendly_name">
+<code class="descname">get_friendly_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser.get_friendly_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser.get_friendly_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The friendly name is mapped to Facebook’s first name. If the first
+name is missing, use the last name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookUser.get_full_name">
+<code class="descname">get_full_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser.get_full_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser.get_full_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Let’s implement this later</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookUser.get_gender">
+<code class="descname">get_gender</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.engine.request.User.Gender<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser.get_gender"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser.get_gender" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the gender from Facebook.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookUser.get_locale">
+<code class="descname">get_locale</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser.get_locale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser.get_locale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a locale-descripting string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookUser.get_postback_url">
+<code class="descname">get_postback_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser.get_postback_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser.get_postback_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a URL which can be POSTed to. The POST body must be a JSON
+message that will be used as payload for a synthetic postback layer
+from this user.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.platforms.facebook.platform.FacebookUser.get_timezone">
+<code class="descname">get_timezone</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[datetime.tzinfo, NoneType]<a class="reference internal" href="_modules/bernard/platforms/facebook/platform.html#FacebookUser.get_timezone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.platforms.facebook.platform.FacebookUser.get_timezone" title="Permalink to this definition">¶</a></dt>
+<dd><p>We can’t exactly know the time zone of the user from what Facebook
+gives (fucking morons) but we can still give something that’ll work
+until next DST.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="media">
+<h2>Media<a class="headerlink" href="#media" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="reporter">
+<h2>Reporter<a class="headerlink" href="#reporter" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-bernard.reporter._base">
+<span id="base"></span><h3>_base<a class="headerlink" href="#module-bernard.reporter._base" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.reporter._base.BaseReporter">
+<em class="property">class </em><code class="descclassname">bernard.reporter._base.</code><code class="descname">BaseReporter</code><a class="reference internal" href="_modules/bernard/reporter/_base.html#BaseReporter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.reporter._base.BaseReporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the base class that reports errors</p>
+<dl class="method">
+<dt id="bernard.reporter._base.BaseReporter.report">
+<code class="descname">report</code><span class="sig-paren">(</span><em>request: Request = None</em>, <em>state: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/reporter/_base.html#BaseReporter.report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.reporter._base.BaseReporter.report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report an error to the reporting system. Give as much context as
+possible.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.reporter._raven">
+<span id="raven"></span><h3>_raven<a class="headerlink" href="#module-bernard.reporter._raven" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.reporter._raven.RavenReporter">
+<em class="property">class </em><code class="descclassname">bernard.reporter._raven.</code><code class="descname">RavenReporter</code><a class="reference internal" href="_modules/bernard/reporter/_raven.html#RavenReporter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.reporter._raven.RavenReporter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report errors to Raven</p>
+<dl class="method">
+<dt id="bernard.reporter._raven.RavenReporter.report">
+<code class="descname">report</code><span class="sig-paren">(</span><em>request: Request = None</em>, <em>state: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/reporter/_raven.html#RavenReporter.report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.reporter._raven.RavenReporter.report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report current exception to Sentry.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="middleware">
+<h2>Middleware<a class="headerlink" href="#middleware" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-bernard.middleware._builtins">
+<span id="buitins"></span><h3>_buitins<a class="headerlink" href="#module-bernard.middleware._builtins" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.middleware._builtins.AutoSleep">
+<em class="property">class </em><code class="descclassname">bernard.middleware._builtins.</code><code class="descname">AutoSleep</code><span class="sig-paren">(</span><em>next_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoSleep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoSleep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically add sleep between text messages so the user has some time to
+to read.</p>
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoSleep.clean_stacks">
+<code class="descname">clean_stacks</code><span class="sig-paren">(</span><em>stacks: List[List[bernard.layers.definitions.BaseLayer]]</em><span class="sig-paren">)</span> &#x2192; List[List[bernard.layers.definitions.BaseLayer]]<a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoSleep.clean_stacks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoSleep.clean_stacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two cases: if a stack finishes by a sleep then let’s keep it (it means
+that there was nothing after the text). However if the stack finishes
+with something else (like a quick reply) then we don’t risk an
+is preserved.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoSleep.expand">
+<code class="descname">expand</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>layer: bernard.layers.definitions.BaseLayer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoSleep.expand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoSleep.expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Expand a layer into a list of layers including the pauses.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoSleep.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request, stacks: List[bernard.layers.stack.Stack]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoSleep.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoSleep.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>For all stacks to be sent, append a pause after each text layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoSleep.reading_time">
+<code class="descname">reading_time</code><span class="sig-paren">(</span><em>text: str</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoSleep.reading_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoSleep.reading_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the time in seconds that the user will need to read a bubble
+containing the text passed as parameter.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoSleep.split_stacks">
+<code class="descname">split_stacks</code><span class="sig-paren">(</span><em>stacks: List[List[bernard.layers.definitions.BaseLayer]]</em><span class="sig-paren">)</span> &#x2192; List[List[bernard.layers.definitions.BaseLayer]]<a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoSleep.split_stacks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoSleep.split_stacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>First step of the stacks cleanup process. We consider that if inside
+a stack there’s a text layer showing up then it’s the beginning of a
+new stack and split upon that.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.middleware._builtins.AutoType">
+<em class="property">class </em><code class="descclassname">bernard.middleware._builtins.</code><code class="descname">AutoType</code><span class="sig-paren">(</span><em>next_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a “typing” indication between each message and then turn it off at
+the last message.</p>
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoType.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request, stacks: List[bernard.layers.stack.Stack]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoType.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoType.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a typing stack after each stack.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoType.pre_handle">
+<code class="descname">pre_handle</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>responder: Responder</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoType.pre_handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoType.pre_handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start typing right when the message is received.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.middleware._builtins.AutoType.typify">
+<code class="descname">typify</code><span class="sig-paren">(</span><em>stack: bernard.layers.stack.Stack</em><span class="sig-paren">)</span> &#x2192; List[bernard.layers.stack.Stack]<a class="reference internal" href="_modules/bernard/middleware/_builtins.html#AutoType.typify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.AutoType.typify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends a typing stack after the given stack, but only if required
+(aka don’t have two typing layers following each other).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.middleware._builtins.BaseMiddleware">
+<em class="property">class </em><code class="descclassname">bernard.middleware._builtins.</code><code class="descname">BaseMiddleware</code><span class="sig-paren">(</span><em>next_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_builtins.html#BaseMiddleware"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._builtins.BaseMiddleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for middlewares. It’s just useful to get the <cite>self.next</cite>
+automatically.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-bernard.middleware._manager">
+<span id="manager"></span><h3>_manager<a class="headerlink" href="#module-bernard.middleware._manager" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="bernard.middleware._manager.Caller">
+<em class="property">class </em><code class="descclassname">bernard.middleware._manager.</code><code class="descname">Caller</code><span class="sig-paren">(</span><em>manager: bernard.middleware._manager.MiddlewareManager</em>, <em>name: str</em>, <em>final: Callable</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/bernard/middleware/_manager.html#Caller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._manager.Caller" title="Permalink to this definition">¶</a></dt>
+<dd><p>This object allows to create functions which can call each other
+recursively without knowing in advance the list of functions to call.</p>
+<p>It’s useful to stack middlewares.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.middleware._manager.MiddlewareManager">
+<em class="property">class </em><code class="descclassname">bernard.middleware._manager.</code><code class="descname">MiddlewareManager</code><a class="reference internal" href="_modules/bernard/middleware/_manager.html#MiddlewareManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._manager.MiddlewareManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages the middlewares and allows to run them.</p>
+<p>Typical use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">async</span> <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span> <span class="o">=</span> <span class="n">MiddlewareManager</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;do_something&#39;</span><span class="p">,</span> <span class="n">do_something</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">func</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="bernard.middleware._manager.MiddlewareManager.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>name: str</em>, <em>final: C</em><span class="sig-paren">)</span> &#x2192; C<a class="reference internal" href="_modules/bernard/middleware/_manager.html#MiddlewareManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._manager.MiddlewareManager.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the function to call which will run all middlewares.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> – Name of the function to be called</li>
+<li><strong>final</strong> – Function to call at the bottom of the stack (that’s the
+one provided by the implementer).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.middleware._manager.MiddlewareManager.health_check">
+<em class="property">classmethod </em><code class="descname">health_check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_manager.html#MiddlewareManager.health_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._manager.MiddlewareManager.health_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the configuration makes sense.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bernard.middleware._manager.MiddlewareManager.init">
+<code class="descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/middleware/_manager.html#MiddlewareManager.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._manager.MiddlewareManager.init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Imports and caches all middleware classes.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="bernard.middleware._manager.MiddlewareManager.instance">
+<em class="property">classmethod </em><code class="descname">instance</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bernard.middleware._manager.MiddlewareManager<a class="reference internal" href="_modules/bernard/middleware/_manager.html#MiddlewareManager.instance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.middleware._manager.MiddlewareManager.instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates, initializes and returns a unique MiddlewareManager instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-bernard.trigram">
+<span id="trigram"></span><h2>Trigram<a class="headerlink" href="#module-bernard.trigram" title="Permalink to this headline">¶</a></h2>
+<p>Trigram computation utils. Although the algorithm are pretty different, the
+code here is inspired from PostgreSQL’s pg_trgm module and should give similar
+or identical results.</p>
+<dl class="class">
+<dt id="bernard.trigram.Matcher">
+<em class="property">class </em><code class="descclassname">bernard.trigram.</code><code class="descname">Matcher</code><span class="sig-paren">(</span><em>trigrams: List[bernard.trigram.Trigram]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/trigram.html#Matcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.Matcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows to match several trigrams at once. This is useful to detect intents.</p>
+<dl class="method">
+<dt id="bernard.trigram.Matcher.similarity">
+<code class="descname">similarity</code><span class="sig-paren">(</span><em>other: bernard.trigram.Trigram</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/bernard/trigram.html#Matcher.similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.Matcher.similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the best similarity within known trigrams.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bernard.trigram.Trigram">
+<em class="property">class </em><code class="descclassname">bernard.trigram.</code><code class="descname">Trigram</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/trigram.html#Trigram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.Trigram" title="Permalink to this definition">¶</a></dt>
+<dd><p>This represents a “compiled” trigram object. It is able to compute its
+similarity with other trigram objects.</p>
+<dl class="method">
+<dt id="bernard.trigram.Trigram.similarity">
+<code class="descname">similarity</code><span class="sig-paren">(</span><em>other: bernard.trigram.Trigram</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/bernard/trigram.html#Trigram.similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.Trigram.similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the similarity with the provided other trigram.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="bernard.trigram.make_trigrams">
+<code class="descclassname">bernard.trigram.</code><code class="descname">make_trigrams</code><span class="sig-paren">(</span><em>i: Iterable[T]</em><span class="sig-paren">)</span> &#x2192; Iterable[Tuple[[Union[~T, NoneType], Union[~T, NoneType]], Union[~T, NoneType]]]<a class="reference internal" href="_modules/bernard/trigram.html#make_trigrams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.make_trigrams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute all trigrams of an iterable and yield them. You probably want
+to do something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">make_trigrams</span><span class="p">(</span><span class="s1">&#39;hi there&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bernard.trigram.normalize">
+<code class="descclassname">bernard.trigram.</code><code class="descname">normalize</code><span class="sig-paren">(</span><em>string: str</em><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/trigram.html#normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes a string to encompass various things humans tend to get wrong:</p>
+<ul class="simple">
+<li>Put everything lowercase</li>
+<li>Drop accents</li>
+<li>Transform all whitespaces sequences into a single space</li>
+<li>Remove spaces before and after punctuation</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="get-started/patterns.html" class="btn btn-neutral" title="Patterns" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

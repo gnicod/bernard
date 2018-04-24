@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Concepts &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Concepts</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/get-started/concepts.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="concepts">
+<span id="concepts"></span><h1>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h1>
+<p>BERNARD uses a few basic concepts that are mostly instinctive but were
+defined a bit further with the idea of fitting with all the platforms
+at the same time.</p>
+<div class="section" id="architecture">
+<span id="architecture"></span><h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this headline">¶</a></h2>
+<p>Bots are a way to easily access a specific service. In that sense, they
+do translate a human interaction into an API call, gets the result and
+they translates it back into human language. It looks like this:</p>
+<p><img alt="architecture" src="../_images/architecture.svg" /></p>
+<p>As you can see, BERNARD is at the center of the information flow, but
+the buisness-related intelligence is located in external APIs.</p>
+<p>This means that although BERNARD is a Python framework, it can integrate
+with services written in any other language and seamlessly communicate
+with your existing infrastructure.</p>
+</div>
+<div class="section" id="nlu">
+<span id="nlu"></span><h2>NLU<a class="headerlink" href="#nlu" title="Permalink to this headline">¶</a></h2>
+<p>NLU stands for “Natural Language Understanding”. It’s considered to be
+the single most important feature of bots and “Artificial Intelligence”
+is a very hot topic at the moment. However, let’s dial down a bit:</p>
+<ul class="simple">
+<li>“Artificial Intelligence” is very dumb. Very very dumb. Google is the
+top player in that field so don’t expect to perform better than they
+do. And you can’t really have a conversation with a Google Assistant,
+can you?</li>
+<li>In practice, we observe that about 3% of people use NLU to interact
+with bots. When there was a 3% market share for IE6, a lot of people
+already had stopped supporting it.</li>
+</ul>
+<p>In short, don’t try to pass the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Turing_test">Turing test</a>. Instead,
+create an experience that don’t depend on understanding what your users
+say.</p>
+<p>However, there is still a need to understand a few things. And also,
+if you’re selling bots, your clients will ask for it and even if they
+don’t they will expect it and if you don’t plan ahead this is going to
+suck up all your energy. Which is not worth it for about 3% of users.</p>
+<p>There is a built-in <a class="reference external" href="./nlu.md">intents detection system</a> based on very
+simple techniques. There is also the
+<a class="reference external" href="https://github.com/BernardFW/iron-throne">Iron Throne</a> project that
+proposes a very simple NLU engine which can be quite effective for
+some uses. If none of those fit your needs, you can turn to external
+services like <code class="docutils literal notranslate"><span class="pre">wit.ai</span></code>, <code class="docutils literal notranslate"><span class="pre">dialogflow.com</span></code> or <code class="docutils literal notranslate"><span class="pre">luis.ai</span></code>. And finally, if
+you want something very specific and a lot of control over it, you can
+try <a class="reference external" href="https://nlu.rasa.com/">rasa NLU</a>.</p>
+</div>
+<div class="section" id="atoms">
+<span id="atoms"></span><h2>Atoms<a class="headerlink" href="#atoms" title="Permalink to this headline">¶</a></h2>
+<p>After analyzing all existing messaging platforms, there is 3 specific
+atoms that stood out and that are the base of BERNARD’s API.</p>
+<div class="section" id="users">
+<span id="users"></span><h3>Users<a class="headerlink" href="#users" title="Permalink to this headline">¶</a></h3>
+<p>Platforms will give you very little information about your users. You
+will get the following:</p>
+<ul class="simple">
+<li><strong>ID</strong></li>
+<li><strong>Name</strong> (at least some form of it)</li>
+<li><strong>Language</strong> (most of the time)</li>
+<li><strong>Time zone</strong> (sometimes)</li>
+</ul>
+<p>As you can see, the only thing we can reliably count on is an ID. Please
+note that in some platforms like Messenger, IDs are bot-scoped.</p>
+</div>
+<div class="section" id="conversations">
+<span id="conversations"></span><h3>Conversations<a class="headerlink" href="#conversations" title="Permalink to this headline">¶</a></h3>
+<p>Bots are not necessarily in a 1-1 conversation with users. Users might
+insert a bot within an existing conversation.</p>
+<p>The interesting thing is that most platforms don’t give you any
+information about conversations. In the end it boils down to:</p>
+<ul class="simple">
+<li><strong>ID</strong></li>
+<li><strong>List of people</strong> (rarely)</li>
+</ul>
+</div>
+<div class="section" id="messages">
+<span id="messages"></span><h3>Messages<a class="headerlink" href="#messages" title="Permalink to this headline">¶</a></h3>
+<p>Messages are the most difficult atom to model. Most of the time, they
+will include “rich” content like images, videos, carousels of items,
+action buttons and so on.</p>
+<p>They can be broken down to this:</p>
+<ul class="simple">
+<li><strong>Sender</strong></li>
+<li><strong>Recipient</strong></li>
+<li><strong>Content</strong></li>
+</ul>
+<p>The content is based on layers. By example an image with a caption
+would be an <code class="docutils literal notranslate"><span class="pre">Image</span></code> layer plus a <code class="docutils literal notranslate"><span class="pre">Text</span></code> layer. A text with quick replies
+(which is a Facebook-specific concept) would be a <code class="docutils literal notranslate"><span class="pre">Text</span></code> plus a
+<code class="docutils literal notranslate"><span class="pre">QuickRepliesList</span></code> layer.</p>
+<p>Example:</p>
+<p><img alt="layers" src="../_images/layers.png" /></p>
+<p>In this real-world example we can see that a text message is associated
+to quick replies. Internally, this is represented by BERNARD layers and
+then automatically translated into Facebook API calls.</p>
+<p><strong>WARNING</strong>: don’t confuse different layers with different messages. If
+you want to send two images, don’t send a single message with two
+<code class="docutils literal notranslate"><span class="pre">Image</span></code> layers, but rather two messages with a single <code class="docutils literal notranslate"><span class="pre">Image</span></code> layer in
+each.</p>
+</div>
+</div>
+<div class="section" id="wrap-up">
+<span id="wrap-up"></span><h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Permalink to this headline">¶</a></h2>
+<p>BERNARD bots are a way to translate human queries into API queries and
+display back the result. They use 3 atoms which are users, conversations
+and messages. Finally, messages are built using layers of content, which
+allow to use a simple API which covers all platforms.</p>
+<p><strong>Next step</strong>: <a class="reference external" href="./fsm.md">Finite-state Machines</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

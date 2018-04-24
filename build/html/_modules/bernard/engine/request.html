@@ -1,0 +1,437 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>bernard.engine.request &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/readme.html">Get Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/concepts.html">Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/fsm.html">Finite-state Machines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/start.html">Start a project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/number-bot.html">Number Bot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../get-started/patterns.html">Patterns</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>bernard.engine.request</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for bernard.engine.request</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">tzinfo</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">bernard.storage.register</span> <span class="k">import</span> <span class="n">Register</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">BaseLayer</span><span class="p">,</span> <span class="n">Stack</span>
+<span class="kn">from</span> <span class="nn">bernard.layers.stack</span> <span class="k">import</span> <span class="n">L</span>
+
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">bernard.i18n.translator</span> <span class="k">import</span> <span class="n">Flags</span>
+
+
+<div class="viewcode-block" id="Conversation"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Conversation">[docs]</a><span class="k">class</span> <span class="nc">Conversation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract representation of a conversation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id_</span></div>
+
+
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract representation of a user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="User.Gender"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.Gender">[docs]</a>    <span class="k">class</span> <span class="nc">Gender</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Represents the gender of a person. Unknown is to be used either when</span>
+<span class="sd">        you actually don&#39;t know or when the gender is more complex than male or</span>
+<span class="sd">        female.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">male</span> <span class="o">=</span> <span class="s1">&#39;male&#39;</span>
+        <span class="n">female</span> <span class="o">=</span> <span class="s1">&#39;female&#39;</span>
+        <span class="n">unknown</span> <span class="o">=</span> <span class="s1">&#39;unknown&#39;</span></div>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id_</span>
+
+<div class="viewcode-block" id="User.get_gender"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.get_gender">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_gender</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Gender</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the gender of the person if known</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Gender</span><span class="o">.</span><span class="n">unknown</span></div>
+
+<div class="viewcode-block" id="User.get_friendly_name"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.get_friendly_name">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_friendly_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes a friendly name (like in &quot;Hi Rémy&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="User.get_formal_name"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.get_formal_name">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_formal_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes a formal name (like in &quot;Howdy Mr Sanchez&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="User.get_full_name"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.get_full_name">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes an administrative full name (like &quot;Name: Rémy Sanchez&quot;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="User.get_timezone"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.get_timezone">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_timezone</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">tzinfo</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the current time zone of the user</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="User.get_locale"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.get_locale">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_locale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a locale-descripting string</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="User.get_postback_url"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.User.get_postback_url">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_postback_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a URL which can be POSTed to. The POST body must be a JSON</span>
+<span class="sd">        message that will be used as payload for a synthetic postback layer</span>
+<span class="sd">        from this user.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
+
+
+<div class="viewcode-block" id="BaseMessage"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.BaseMessage">[docs]</a><span class="k">class</span> <span class="nc">BaseMessage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class represents a message received by the platform. It is in charge</span>
+<span class="sd">    of implementing the following abstract methods from what the platform</span>
+<span class="sd">    can provide.</span>
+
+<span class="sd">    The methods here should, in principle, only get called once. Though it&#39;s</span>
+<span class="sd">    not guaranteed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BaseMessage.get_platform"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.BaseMessage.get_platform">[docs]</a>    <span class="k">def</span> <span class="nf">get_platform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a static string indicating the name of the platform that this</span>
+<span class="sd">        message comes from.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseMessage.get_user"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.BaseMessage.get_user">[docs]</a>    <span class="k">def</span> <span class="nf">get_user</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a user object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseMessage.get_conversation"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.BaseMessage.get_conversation">[docs]</a>    <span class="k">def</span> <span class="nf">get_conversation</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Conversation</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a conversation object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseMessage.get_layers"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.BaseMessage.get_layers">[docs]</a>    <span class="k">def</span> <span class="nf">get_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseLayer</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the layers found in the message.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+<div class="viewcode-block" id="BaseMessage.should_confuse"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.BaseMessage.should_confuse">[docs]</a>    <span class="k">def</span> <span class="nf">should_confuse</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this returns &quot;True&quot; then the message should trigger a confused state</span>
+<span class="sd">        when not understood.</span>
+
+<span class="sd">        Otherwise, it is simply ignored.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="Request"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request">[docs]</a><span class="k">class</span> <span class="nc">Request</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The request object is generated after each message. Its goal is to provide</span>
+<span class="sd">    a comprehensive access to the received message and its context to be used</span>
+<span class="sd">    by the transitions and the handlers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">message</span><span class="p">:</span> <span class="n">BaseMessage</span><span class="p">,</span>
+                 <span class="n">register</span><span class="p">:</span> <span class="n">Register</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">platform</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get_platform</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conversation</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get_conversation</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get_user</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="n">Stack</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">get_layers</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register</span> <span class="o">=</span> <span class="n">register</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom_content</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_locale_override</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Request.get_trans_reg"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.get_trans_reg">[docs]</a>    <span class="k">def</span> <span class="nf">get_trans_reg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Text</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">Any</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convenience function to access the transition register of a specific</span>
+<span class="sd">        kind.</span>
+
+<span class="sd">        :param name: Name of the register you want to see</span>
+<span class="sd">        :param default: What to return by default</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Register</span><span class="o">.</span><span class="n">TRANSITION</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="n">tr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Request.has_layer"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.has_layer">[docs]</a>    <span class="k">def</span> <span class="nf">has_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">L</span><span class="p">],</span> <span class="n">became</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Proxy to stack</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">has_layer</span><span class="p">(</span><span class="n">class_</span><span class="p">,</span> <span class="n">became</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Request.get_layer"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.get_layer">[docs]</a>    <span class="k">def</span> <span class="nf">get_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">L</span><span class="p">],</span> <span class="n">became</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">L</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Proxy to stack</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">class_</span><span class="p">,</span> <span class="n">became</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Request.get_layers"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.get_layers">[docs]</a>    <span class="k">def</span> <span class="nf">get_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">L</span><span class="p">],</span> <span class="n">became</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">L</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Proxy to stack</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">get_layers</span><span class="p">(</span><span class="n">class_</span><span class="p">,</span> <span class="n">became</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Request.set_locale_override"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.set_locale_override">[docs]</a>    <span class="k">def</span> <span class="nf">set_locale_override</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">locale</span><span class="p">:</span> <span class="n">Text</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This allows to override manually the locale that will be used in</span>
+<span class="sd">        replies.</span>
+
+<span class="sd">        :param locale: Name of the locale (format &#39;fr&#39; or &#39;fr_FR&#39;)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_locale_override</span> <span class="o">=</span> <span class="n">locale</span></div>
+
+<div class="viewcode-block" id="Request.get_locale"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.get_locale">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_locale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the locale to use for this request. It&#39;s either the overriden locale</span>
+<span class="sd">        or the locale provided by the platform.</span>
+
+<span class="sd">        :return: Locale to use for this request</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locale_override</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locale_override</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">get_locale</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Request.get_trans_flags"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.get_trans_flags">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_trans_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Flags&#39;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gives a chance to middlewares to make the translation flags</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="kn">from</span> <span class="nn">bernard.middleware</span> <span class="k">import</span> <span class="n">MiddlewareManager</span>
+
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">make_flags</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;Flags&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="n">mf</span> <span class="o">=</span> <span class="n">MiddlewareManager</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;make_trans_flags&#39;</span><span class="p">,</span> <span class="n">make_flags</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">mf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

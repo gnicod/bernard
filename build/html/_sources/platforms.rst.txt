@@ -1,0 +1,43 @@
+.. _api:
+
+API
+===
+
+Engine
+-----
+
+FSM
+~~~
+.. automodule:: bernard.engine.fsm
+    :members:
+Platform
+~~~
+.. automodule:: bernard.engine.platform
+    :members:
+Request
+~~~
+.. automodule:: bernard.engine.request
+    :members:
+Responder
+~~~
+.. automodule:: bernard.engine.responder
+    :members:
+
+
+Platforms
+--------
+
+Telegram
+~~~~~~~~
+.. automodule:: bernard.platforms.telegram.platform
+    :members:
+
+Facebook
+~~~~~~~~
+.. automodule:: bernard.platforms.facebook.platform
+    :members:
+
+Layers
+-----
+.. automodule:: bernard.layers.definitions
+    :members:

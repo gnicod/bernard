@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Platforms &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Platforms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/platforms.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="platforms">
+<span id="platforms"></span><h1>Platforms<a class="headerlink" href="#platforms" title="Permalink to this headline">¶</a></h1>
+<p>Although you can provide your own platform, BERNARD provides compatibility for
+several platforms. You will find here all the supported platforms and their
+configuration options.</p>
+<div class="section" id="facebook-messenger">
+<span id="facebook-messenger"></span><h2>Facebook Messenger<a class="headerlink" href="#facebook-messenger" title="Permalink to this headline">¶</a></h2>
+<p><strong>Class</strong>: <code class="docutils literal notranslate"><span class="pre">bernard.platforms.facebook.platform.Facebook</span></code></p>
+<p><strong>Example config</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">getenv</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
+
+
+<span class="k">def</span> <span class="nf">extract_domain</span><span class="p">(</span><span class="n">var_name</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="n">var_name</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">var</span><span class="p">:</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">hostname</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">make_whitelist</span><span class="p">():</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">extract_domain</span><span class="p">(</span><span class="s1">&#39;BERNARD_BASE_URL&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="n">PLATFORMS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;bernard.platforms.facebook.platform.Facebook&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;settings&#39;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;security_token&#39;</span><span class="p">:</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;FB_SECURITY_TOKEN&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;app_secret&#39;</span><span class="p">:</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;FB_APP_SECRET&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;page_id&#39;</span><span class="p">:</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;FB_PAGE_ID&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;page_token&#39;</span><span class="p">:</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;FB_PAGE_TOKEN&#39;</span><span class="p">),</span>
+                <span class="s1">&#39;whitelist&#39;</span><span class="p">:</span> <span class="n">make_whitelist</span><span class="p">(),</span>
+                <span class="s1">&#39;greeting&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s1">&#39;locale&#39;</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;Hi {{user_first_name}}&#39;</span>
+                    <span class="p">},</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;menu&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s1">&#39;locale&#39;</span><span class="p">:</span> <span class="s1">&#39;default&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;call_to_actions&#39;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="p">{</span>
+                                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;postback&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Foo&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;payload&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="s1">&#39;foo&#39;</span><span class="p">}),</span>
+                            <span class="p">},</span>
+                            <span class="p">{</span>
+                                <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;postback&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Bar&#39;</span><span class="p">,</span>
+                                <span class="s1">&#39;payload&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span><span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">}),</span>
+                            <span class="p">},</span>
+                        <span class="p">],</span>
+                    <span class="p">},</span>
+                <span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Here the settings accept a list of objects which can each point to a different
+page/app. For each object, the keys are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">security_token</span></code> - An arbitrary secure random token that Facebook will ask
+you to provide when hooking the bot.</li>
+<li><code class="docutils literal notranslate"><span class="pre">app_secret</span></code> - The app secret, found in the app configuration page</li>
+<li><code class="docutils literal notranslate"><span class="pre">page_id</span></code> - The ID of the Facebook page</li>
+<li><code class="docutils literal notranslate"><span class="pre">page_token</span></code> - The page subscription token created in your app’s admin</li>
+<li><code class="docutils literal notranslate"><span class="pre">whitelist</span></code> - A list of whitelisted domain names. Domains that need to be
+whitelisted include:<ul>
+<li>The bot’s domain</li>
+<li>Pages that will use the JS Messenger SDK</li>
+<li>Pages that will display a Checkbox Plugin</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">greeting</span></code> - Greeting page configuration. See
+<a class="reference external" href="https://developers.facebook.com/docs/messenger-platform/reference/messenger-profile-api/greeting">the FB doc</a>
+for syntax.</li>
+<li><code class="docutils literal notranslate"><span class="pre">menu</span></code> - Contents of the menu. See
+<a class="reference external" href="https://developers.facebook.com/docs/messenger-platform/reference/messenger-profile-api/persistent-menu">the FB doc</a>
+for syntax.</li>
+</ul>
+<p>Please note that only <code class="docutils literal notranslate"><span class="pre">security_token</span></code>, <code class="docutils literal notranslate"><span class="pre">app_secret</span></code>, <code class="docutils literal notranslate"><span class="pre">page_id</span></code> and
+<code class="docutils literal notranslate"><span class="pre">page_token</span></code> are mandatory for the bot to work.</p>
+<div class="section" id="sending">
+<span id="sending"></span><h3>Sending<a class="headerlink" href="#sending" title="Permalink to this headline">¶</a></h3>
+<p>Authorized message stacks are:</p>
+<ul class="simple">
+<li><strong>Text</strong>: <code class="docutils literal notranslate"><span class="pre">(Text|RawText|MultiText)+</span> <span class="pre">QuickRepliesList?</span> <span class="pre">MessagingType?</span></code></li>
+<li><strong><a class="reference external" href="https://developers.facebook.com/docs/messenger-platform/send-messages/template/generic">Generic Template</a></strong>: <code class="docutils literal notranslate"><span class="pre">GenericTemplate</span> <span class="pre">QuickRepliesList?</span> <span class="pre">MessagingType?</span></code></li>
+<li><strong><a class="reference external" href="https://developers.facebook.com/docs/messenger-platform/send-messages/template/button">Button Template</a></strong>: <code class="docutils literal notranslate"><span class="pre">ButtonTemplate</span> <span class="pre">QuickRepliesList?</span> <span class="pre">MessagingType?</span></code></li>
+<li><strong>Attachment</strong>: <code class="docutils literal notranslate"><span class="pre">(Image|Audio|Video|File)</span> <span class="pre">QuickRepliesList?</span> <span class="pre">MessagingType?</span></code></li>
+<li><strong>Sleep</strong>: <code class="docutils literal notranslate"><span class="pre">Sleep</span></code></li>
+<li><strong>Typing</strong>: <code class="docutils literal notranslate"><span class="pre">Typing</span></code></li>
+</ul>
+</div>
+<div class="section" id="receiving">
+<span id="receiving"></span><h3>Receiving<a class="headerlink" href="#receiving" title="Permalink to this headline">¶</a></h3>
+<p>Expected layers are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">RawText</span></code> (+ <code class="docutils literal notranslate"><span class="pre">QuickReply</span></code> if a quick reply was clicked)</li>
+<li><code class="docutils literal notranslate"><span class="pre">Image</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Audio</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">File</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Video</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Location</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Postback</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Optin</span></code></li>
+</ul>
+</div>
+</div>
+<div class="section" id="telegram">
+<span id="telegram"></span><h2>Telegram<a class="headerlink" href="#telegram" title="Permalink to this headline">¶</a></h2>
+<p><strong>Class</strong>: <code class="docutils literal notranslate"><span class="pre">bernard.platforms.telegram.platform.Telegram</span></code></p>
+<p><strong>Example config</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PLATFORMS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;bernard.platforms.telegram.platform.Telegram&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;settings&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;token&#39;</span><span class="p">:</span> <span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;TELEGRAM_TOKEN&#39;</span><span class="p">),</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>In order to create a Telegram bot and configure it, you need to talk
+to <code class="docutils literal notranslate"><span class="pre">&#64;BotFather</span></code>. He will also provide you with the token to be put in
+<code class="docutils literal notranslate"><span class="pre">TELEGRAM_TOKEN</span></code>.</p>
+<div class="section" id="sending">
+<span id="id1"></span><h3>Sending<a class="headerlink" href="#sending" title="Permalink to this headline">¶</a></h3>
+<p>Authorized message stacks are:</p>
+<ul class="simple">
+<li><strong><a class="reference external" href="https://core.telegram.org/bots/api#sendmessage">Plain Text</a></strong>: <code class="docutils literal notranslate"><span class="pre">(Text|RawText)+</span> <span class="pre">(InlineKeyboard|ReplyKeyboard|ReplyKeyboardRemove)?</span> <span class="pre">Reply?|(Text|RawText)</span> <span class="pre">InlineKeyboard?</span> <span class="pre">Reply?</span> <span class="pre">Update</span></code></li>
+<li><strong><a class="reference external" href="https://core.telegram.org/bots/api#sendmessage">Markdown</a></strong>: <code class="docutils literal notranslate"><span class="pre">Markdown+</span> <span class="pre">(InlineKeyboard|ReplyKeyboard|ReplyKeyboardRemove)?</span> <span class="pre">Reply?|Markdown</span> <span class="pre">InlineKeyboard?</span> <span class="pre">Reply?</span> <span class="pre">Update</span></code></li>
+<li><strong><a class="reference external" href="https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating">Inline Answer</a></strong>: <code class="docutils literal notranslate"><span class="pre">AnswerInlineQuery</span></code></li>
+<li><strong>Sleep</strong>: <code class="docutils literal notranslate"><span class="pre">Sleep</span></code></li>
+<li><strong>Typing</strong>: <code class="docutils literal notranslate"><span class="pre">Typing</span></code></li>
+</ul>
+</div>
+<div class="section" id="receiving">
+<span id="id2"></span><h3>Receiving<a class="headerlink" href="#receiving" title="Permalink to this headline">¶</a></h3>
+<p>Expected layers are:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">RawText</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">BotCommand</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Message</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Image</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">Postback</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">InlineMessage</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">InlineQuery</span></code></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Finite-state Machines &mdash; bernard  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> bernard
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">bernard</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Finite-state Machines</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/get-started/fsm.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="finite-state-machines">
+<span id="finite-state-machines"></span><h1>Finite-state Machines<a class="headerlink" href="#finite-state-machines" title="Permalink to this headline">¶</a></h1>
+<p>Finite-state Machines (herafter shortened to “FSM”) are an abstract
+machine that is widely used because it’s a simple way to describe a
+process. <a class="reference external" href="https://en.wikipedia.org/wiki/Finite-state_machine">Wikipedia</a>
+will tell you all about the maths and definitions but here’s we’ll focus
+on what matters for BERNARD.</p>
+<p>Basically, a FSM is a set of <strong>states</strong> which are connected to each
+other by <strong>transitions</strong>. At any moment, the machine is at exactly
+one state. When an event occurs, it will <em>trigger</em> a transition and
+move to another state.</p>
+<div class="section" id="sample-conversation">
+<span id="sample-conversation"></span><h2>Sample conversation<a class="headerlink" href="#sample-conversation" title="Permalink to this headline">¶</a></h2>
+<p>Let’s consider the following conversation:</p>
+<ul class="simple">
+<li><strong>User</strong>: <em>clicks “Get Started”</em></li>
+<li><strong>Bot</strong>: Welcome John, I will help you find bars! But before, do you
+accept my terms of service?</li>
+<li><strong>User</strong>: No <em>(quick reply)</em></li>
+<li><strong>Bot</strong>: Fine. You can accept later by saying “OK”.</li>
+<li><strong>User</strong>: OK <em>(quick reply)</em></li>
+<li><strong>Bot</strong>: Great! Please send me your location</li>
+<li><strong>User</strong>: <em>Location</em></li>
+<li><strong>Bot</strong>: Awesome, here’s bars near your location: […].</li>
+</ul>
+</div>
+<div class="section" id="fsm-model">
+<span id="fsm-model"></span><h2>FSM model<a class="headerlink" href="#fsm-model" title="Permalink to this headline">¶</a></h2>
+<p>This can be modeled as follows:</p>
+<p><img alt="FSM" src="../_images/fsm.svg" /></p>
+<ul class="simple">
+<li>The squares are states. When the bot enters a state (and only then) it
+can send messages to the user.</li>
+<li>The arrows are triggers. It’s the possible actions that the user can
+do to trigger a transition from one state to the other.</li>
+<li>The small disc on top is the initial state.</li>
+</ul>
+<p>Triggers can only be activated if the current state is its starting
+point. By exemple, if the user sends his location right at <code class="docutils literal notranslate"><span class="pre">1.</span></code> nothing
+will happen while it would trigger a transition if it was in <code class="docutils literal notranslate"><span class="pre">3.</span></code> or
+<code class="docutils literal notranslate"><span class="pre">4.</span></code>.</p>
+<p>Triggers starting from the initial state are always candidates, even if
+the user is currently engaged in a conversation. This allows the user to
+jump from one feature to another without having to exhaust the flow.</p>
+<p>In the current case, if the user clicked “Get Started” again while
+seeing bars, the conversation would start again.</p>
+</div>
+<div class="section" id="probabilistic-model">
+<span id="probabilistic-model"></span><h2>Probabilistic model<a class="headerlink" href="#probabilistic-model" title="Permalink to this headline">¶</a></h2>
+<p>One thing with user interactions is that you can’t always be 100% sure
+of what they mean, espcially if you do NLU. In BERNARD, each trigger
+will emit a <em>probability</em> that a given user action matches what the
+trigger expects. Then BERNARD will select the most likely trigger and
+go with it.</p>
+</div>
+<div class="section" id="wrap-up">
+<span id="wrap-up"></span><h2>Wrap-up<a class="headerlink" href="#wrap-up" title="Permalink to this headline">¶</a></h2>
+<p>FSMs are a simple way to describe a conversation. They have states which
+are connected by triggers. Triggers will be activated by user actions
+based on a probabilistic model. This is what drives transitions between
+states. And finally, the initial state is a meta-state which is always
+considered onto which you can attach the starting points of your
+scenarii.</p>
+<p><strong>Next step</strong>: <a class="reference external" href="./installation.md">installation</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Remy Sanchez.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          
+          SphinxRtdTheme.Navigation.enableSticky();
+          
+      });
+  </script> 
+
+</body>
+</html>
