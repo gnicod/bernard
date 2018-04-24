@@ -157,21 +157,58 @@
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Dict</span>
-<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">bernard.core.health_check</span> <span class="k">import</span> <span class="n">HealthCheckFail</span>
-<span class="kn">from</span> <span class="nn">bernard.i18n.translator</span> <span class="k">import</span> <span class="n">MissingTranslationError</span>
-<span class="kn">from</span> <span class="nn">bernard.middleware</span> <span class="k">import</span> <span class="n">MiddlewareManager</span>
-<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="n">import_class</span>
-<span class="kn">from</span> <span class="nn">bernard.storage.register</span> <span class="k">import</span> <span class="n">BaseRegisterStore</span><span class="p">,</span> <span class="n">Register</span>
-<span class="kn">from</span> <span class="nn">bernard.reporter</span> <span class="k">import</span> <span class="n">reporter</span>
-<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">RawText</span>
-<span class="kn">from</span> <span class="nn">.transition</span> <span class="k">import</span> <span class="n">Transition</span>
-<span class="kn">from</span> <span class="nn">.triggers</span> <span class="k">import</span> <span class="n">BaseTrigger</span>
-<span class="kn">from</span> <span class="nn">.state</span> <span class="k">import</span> <span class="n">BaseState</span>
-<span class="kn">from</span> <span class="nn">.request</span> <span class="k">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">BaseMessage</span>
-<span class="kn">from</span> <span class="nn">.responder</span> <span class="k">import</span> <span class="n">Responder</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">Iterator</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+<span class="p">)</span>
 
+<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">settings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.core.health_check</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">HealthCheckFail</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.i18n.translator</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">MissingTranslationError</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">RawText</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.middleware</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">MiddlewareManager</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.reporter</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">reporter</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.storage.register</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseRegisterStore</span><span class="p">,</span>
+    <span class="n">Register</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">import_class</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.request</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseMessage</span><span class="p">,</span>
+    <span class="n">Request</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.responder</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Responder</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.state</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseState</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.transition</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Transition</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.triggers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseTrigger</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;bernard.fsm&#39;</span><span class="p">)</span>
 
@@ -359,7 +396,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Next state: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">state_class</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
 
-        <span class="n">state</span> <span class="o">=</span> <span class="n">state_class</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">responder</span><span class="p">,</span> <span class="n">trigger</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state_class</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">responder</span><span class="p">,</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">trigger</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">dnr</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">_run_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responder</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span> \
@@ -367,6 +404,8 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Execute the state, or if execution fails handle it.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">user_trigger</span> <span class="o">=</span> <span class="n">trigger</span>
 
         <span class="c1"># noinspection PyBroadException</span>
         <span class="k">try</span><span class="p">:</span>
@@ -386,7 +425,7 @@
                     <span class="k">break</span>
 
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Jumping to state: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">state_class</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
-                <span class="n">state</span> <span class="o">=</span> <span class="n">state_class</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">responder</span><span class="p">)</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">state_class</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">responder</span><span class="p">,</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">user_trigger</span><span class="p">)</span>
                 <span class="k">await</span> <span class="n">state</span><span class="o">.</span><span class="n">handle</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Error while handling state &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">name</span><span class="p">())</span>
@@ -397,9 +436,9 @@
         <span class="k">return</span> <span class="n">state</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">_build_state_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                              <span class="n">state</span><span class="p">:</span> <span class="n">BaseState</span><span class="p">,</span>
-                              <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
-                              <span class="n">responder</span><span class="p">:</span> <span class="n">Responder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+                                    <span class="n">state</span><span class="p">:</span> <span class="n">BaseState</span><span class="p">,</span>
+                                    <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
+                                    <span class="n">responder</span><span class="p">:</span> <span class="n">Responder</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Build the next register to store.</span>
 
@@ -440,16 +479,21 @@
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Incoming message: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span>
             <span class="k">await</span> <span class="n">mm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;pre_handle&#39;</span><span class="p">,</span> <span class="n">noop</span><span class="p">)(</span><span class="n">request</span><span class="p">,</span> <span class="n">responder</span><span class="p">)</span>
 
+            <span class="c1"># noinspection PyBroadException</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">state</span><span class="p">,</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">dnr</span> <span class="o">=</span> \
                     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_state</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">responder</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="n">reporter</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Error while finding a transition from </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
                                  <span class="n">reg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">Register</span><span class="o">.</span><span class="n">STATE</span><span class="p">))</span>
+                <span class="n">reporter</span><span class="o">.</span><span class="n">report</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="k">if</span> <span class="n">state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s1">&#39;No next state found but &quot;</span><span class="si">%s</span><span class="s1">&quot; is not confusing, stopping&#39;</span><span class="p">,</span>
+                    <span class="n">request</span><span class="o">.</span><span class="n">message</span><span class="p">,</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="n">state</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_state</span><span class="p">(</span><span class="n">responder</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">trigger</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>

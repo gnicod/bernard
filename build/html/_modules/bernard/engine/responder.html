@@ -154,8 +154,16 @@
             
   <h1>Source code for bernard.engine.responder</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">Stack</span><span class="p">,</span> <span class="n">BaseLayer</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseLayer</span><span class="p">,</span>
+    <span class="n">Stack</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.platform</span> <span class="k">import</span> <span class="n">Platform</span>

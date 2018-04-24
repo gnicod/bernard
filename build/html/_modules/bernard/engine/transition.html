@@ -154,11 +154,26 @@
             
   <h1>Source code for bernard.engine.transition</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span>
-<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="n">run_or_return</span>
-<span class="kn">from</span> <span class="nn">.triggers</span> <span class="k">import</span> <span class="n">BaseTrigger</span>
-<span class="kn">from</span> <span class="nn">.state</span> <span class="k">import</span> <span class="n">BaseState</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">settings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">run_or_return</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.state</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseState</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.triggers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseTrigger</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="Transition"><a class="viewcode-back" href="../../../api.html#bernard.engine.transition.Transition">[docs]</a><span class="k">class</span> <span class="nc">Transition</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>

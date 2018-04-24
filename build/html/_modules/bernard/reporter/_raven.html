@@ -154,12 +154,28 @@
             
   <h1>Source code for bernard.reporter._raven</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Text</span>
-<span class="kn">from</span> <span class="nn">raven</span> <span class="k">import</span> <span class="n">Client</span>
-<span class="kn">from</span> <span class="nn">raven_aiohttp</span> <span class="k">import</span> <span class="n">AioHttpTransport</span>
-<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="n">make_rw</span>
-<span class="kn">from</span> <span class="nn">._base</span> <span class="k">import</span> <span class="n">BaseReporter</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">raven</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Client</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">raven_aiohttp</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">AioHttpTransport</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">settings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">make_rw</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">._base</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseReporter</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="n">Request</span>

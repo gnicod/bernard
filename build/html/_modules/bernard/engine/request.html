@@ -154,13 +154,31 @@
             
   <h1>Source code for bernard.engine.request</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">tzinfo</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">bernard.storage.register</span> <span class="k">import</span> <span class="n">Register</span>
-<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">BaseLayer</span><span class="p">,</span> <span class="n">Stack</span>
-<span class="kn">from</span> <span class="nn">bernard.layers.stack</span> <span class="k">import</span> <span class="n">L</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">tzinfo</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Enum</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+<span class="p">)</span>
 
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseLayer</span><span class="p">,</span>
+    <span class="n">Stack</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.layers.stack</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">L</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.storage.register</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Register</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">bernard.i18n.translator</span> <span class="k">import</span> <span class="n">Flags</span>
@@ -349,8 +367,8 @@
 
 <div class="viewcode-block" id="Request.get_locale"><a class="viewcode-back" href="../../../api.html#bernard.engine.request.Request.get_locale">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_locale</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Text</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the locale to use for this request. It&#39;s either the overriden locale</span>
-<span class="sd">        or the locale provided by the platform.</span>
+<span class="sd">        Get the locale to use for this request. It&#39;s either the overridden</span>
+<span class="sd">        locale or the locale provided by the platform.</span>
 
 <span class="sd">        :return: Locale to use for this request</span>
 <span class="sd">        &quot;&quot;&quot;</span>

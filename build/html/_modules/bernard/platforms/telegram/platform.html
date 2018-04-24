@@ -154,41 +154,96 @@
             
   <h1>Source code for bernard.platforms.telegram.platform</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">ujson</span>
+<span class="kn">from</span> <span class="nn">asyncio</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Lock</span><span class="p">,</span>
+    <span class="n">sleep</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">tzinfo</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">hashlib</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">sha256</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Set</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">quote</span><span class="p">,</span>
+    <span class="n">urljoin</span><span class="p">,</span>
+<span class="p">)</span>
+
 <span class="kn">import</span> <span class="nn">jwt</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">tzinfo</span>
-<span class="kn">from</span> <span class="nn">hashlib</span> <span class="k">import</span> <span class="n">sha256</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Set</span>
-<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">quote</span><span class="p">,</span> <span class="n">urljoin</span>
+<span class="kn">from</span> <span class="nn">aiohttp.web_request</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Request</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">aiohttp.web_response</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">json_response</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">aiohttp.web_urldispatcher</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">UrlDispatcher</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">asyncio</span> <span class="k">import</span> <span class="n">Lock</span>
+<span class="kn">import</span> <span class="nn">ujson</span>
+<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">layers</span> <span class="k">as</span> <span class="n">lyr</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">settings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.core.health_check</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">HealthCheckFail</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.platform</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">PlatformOperationError</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseMessage</span><span class="p">,</span>
+    <span class="n">Conversation</span><span class="p">,</span>
+    <span class="n">Request</span> <span class="k">as</span> <span class="n">BernardRequest</span><span class="p">,</span>
+    <span class="n">User</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.responder</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Layers</span><span class="p">,</span>
+    <span class="n">Responder</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.i18n</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">render</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseLayer</span><span class="p">,</span>
+    <span class="n">Stack</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.media.base</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseMedia</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">patch_dict</span><span class="p">,</span>
+    <span class="n">patch_qs</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">aiohttp.web_request</span> <span class="k">import</span> <span class="n">Request</span>
-<span class="kn">from</span> <span class="nn">aiohttp.web_response</span> <span class="k">import</span> <span class="n">json_response</span>
-<span class="kn">from</span> <span class="nn">aiohttp.web_urldispatcher</span> <span class="k">import</span> <span class="n">UrlDispatcher</span>
-
-<span class="kn">from</span> <span class="nn">bernard.core.health_check</span> <span class="k">import</span> <span class="n">HealthCheckFail</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.platform</span> <span class="k">import</span> <span class="n">PlatformOperationError</span>
-<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="n">BaseMessage</span><span class="p">,</span> <span class="n">Conversation</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> \
-    <span class="n">Request</span> <span class="k">as</span> <span class="n">BernardRequest</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.responder</span> <span class="k">import</span> <span class="n">Responder</span><span class="p">,</span> <span class="n">Layers</span>
-<span class="kn">from</span> <span class="nn">bernard.i18n</span> <span class="k">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">BaseLayer</span><span class="p">,</span> <span class="n">Stack</span>
-<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="n">layers</span> <span class="k">as</span> <span class="n">lyr</span>
-<span class="kn">from</span> <span class="nn">bernard.media.base</span> <span class="k">import</span> <span class="n">BaseMedia</span>
-<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="n">patch_dict</span><span class="p">,</span> <span class="n">patch_qs</span>
-<span class="kn">from</span> <span class="nn">...platforms</span> <span class="k">import</span> <span class="n">SimplePlatform</span>
+<span class="kn">from</span> <span class="nn">...platforms</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">SimplePlatform</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">._utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">set_reply_markup</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.layers</span> <span class="k">import</span> <span class="p">(</span>
     <span class="n">AnswerCallbackQuery</span><span class="p">,</span>
-    <span class="n">Update</span><span class="p">,</span>
-    <span class="n">InlineQuery</span><span class="p">,</span>
     <span class="n">AnswerInlineQuery</span><span class="p">,</span>
-    <span class="n">Reply</span><span class="p">,</span>
-    <span class="n">InlineMessage</span><span class="p">,</span>
     <span class="n">BotCommand</span><span class="p">,</span>
+    <span class="n">InlineMessage</span><span class="p">,</span>
+    <span class="n">InlineQuery</span><span class="p">,</span>
+    <span class="n">Reply</span><span class="p">,</span>
+    <span class="n">Update</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">._utils</span> <span class="k">import</span> <span class="n">set_reply_markup</span>
+<span class="kn">from</span> <span class="nn">.media</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Photo</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">TELEGRAM_URL</span> <span class="o">=</span> <span class="s1">&#39;https://api.telegram.org/bot</span><span class="si">{token}</span><span class="s1">/</span><span class="si">{method}</span><span class="s1">&#39;</span>
 
@@ -324,6 +379,10 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_telegram</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">sub_msg</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="s1">&#39;photo&#39;</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
+                <span class="n">media</span> <span class="o">=</span> <span class="n">Photo</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;photo&#39;</span><span class="p">])</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="n">media</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="s1">&#39;callback_query&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">:</span>
             <span class="n">payload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update</span><span class="p">[</span><span class="s1">&#39;callback_query&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
@@ -481,6 +540,8 @@
                     <span class="s1">&#39;Reply?$&#39;</span>
 
                     <span class="s1">&#39;|^Markdown InlineKeyboard? Reply? Update$&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;sleep&#39;</span><span class="p">:</span> <span class="s1">&#39;^Sleep$&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;typing&#39;</span><span class="p">:</span> <span class="s1">&#39;^Typing$&#39;</span><span class="p">,</span>
     <span class="p">}</span>
 
 <div class="viewcode-block" id="Telegram.self_check"><a class="viewcode-back" href="../../../../api.html#bernard.platforms.telegram.platform.Telegram.self_check">[docs]</a>    <span class="nd">@classmethod</span>
@@ -636,7 +697,7 @@
 <div class="viewcode-block" id="Telegram.call"><a class="viewcode-back" href="../../../../api.html#bernard.platforms.telegram.platform.Telegram.call">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                    <span class="n">method</span><span class="p">:</span> <span class="n">Text</span><span class="p">,</span>
                    <span class="n">_ignore</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                   <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+                   <span class="o">**</span><span class="n">params</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Call a telegram method</span>
 
@@ -788,10 +849,34 @@
 
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_text</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="s1">&#39;Markdown&#39;</span><span class="p">)</span>
 
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_send_sleep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">Stack</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sleep for the amount of time specified in the Sleep layer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">Sleep</span><span class="p">)</span><span class="o">.</span><span class="n">duration</span>
+        <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+
     <span class="k">async</span> <span class="k">def</span> <span class="nf">_send_inline_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">Stack</span><span class="p">):</span>
         <span class="n">aiq</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">AnswerInlineQuery</span><span class="p">)</span>
         <span class="n">answer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">aiq</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="s1">&#39;answerInlineQuery&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">answer</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_send_typing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">stack</span><span class="p">:</span> <span class="n">Stack</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        In telegram, the typing stops when the message is received. Thus, there</span>
+<span class="sd">        is no &quot;typing stops&quot; messages to send. The API is only called when</span>
+<span class="sd">        typing must start.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">Typing</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">t</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span>
+                <span class="s1">&#39;sendChatAction&#39;</span><span class="p">,</span>
+                <span class="n">chat_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">get_chat_id</span><span class="p">(),</span>
+                <span class="n">action</span><span class="o">=</span><span class="s1">&#39;typing&#39;</span><span class="p">,</span>
+            <span class="p">)</span>
 
 <div class="viewcode-block" id="Telegram.ensure_usable_media"><a class="viewcode-back" href="../../../../api.html#bernard.platforms.telegram.platform.Telegram.ensure_usable_media">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_usable_media</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">media</span><span class="p">:</span> <span class="n">BaseMedia</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BaseMedia</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>

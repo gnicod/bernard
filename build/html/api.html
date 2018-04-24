@@ -449,8 +449,8 @@ by the transitions and the handlers.</p>
 <dl class="method">
 <dt id="bernard.engine.request.Request.get_locale">
 <code class="descname">get_locale</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/bernard/engine/request.html#Request.get_locale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.request.Request.get_locale" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the locale to use for this request. It’s either the overriden locale
-or the locale provided by the platform.</p>
+<dd><p>Get the locale to use for this request. It’s either the overridden
+locale or the locale provided by the platform.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -622,7 +622,7 @@ second step is to send all messages as grouped in time as possible.</p>
 <span id="state"></span><h3>State<a class="headerlink" href="#module-bernard.engine.state" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="bernard.engine.state.BaseState">
-<em class="property">class </em><code class="descclassname">bernard.engine.state.</code><code class="descname">BaseState</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>responder: bernard.engine.responder.Responder</em>, <em>trigger: Union[bernard.engine.triggers.BaseTrigger</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#BaseState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">bernard.engine.state.</code><code class="descname">BaseState</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>responder: bernard.engine.responder.Responder</em>, <em>trigger: bernard.engine.triggers.BaseTrigger</em>, <em>user_trigger: bernard.engine.triggers.BaseTrigger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#BaseState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.BaseState" title="Permalink to this definition">¶</a></dt>
 <dd><p>This is the base state interface. When implementing a bot, you need to
 implement it.</p>
 <p>What is advised is to create your own base class for your bot, so it can
@@ -678,7 +678,7 @@ name.</p>
 
 <dl class="class">
 <dt id="bernard.engine.state.DefaultState">
-<em class="property">class </em><code class="descclassname">bernard.engine.state.</code><code class="descname">DefaultState</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>responder: bernard.engine.responder.Responder</em>, <em>trigger: Union[bernard.engine.triggers.BaseTrigger</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#DefaultState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.DefaultState" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">bernard.engine.state.</code><code class="descname">DefaultState</code><span class="sig-paren">(</span><em>request: bernard.engine.request.Request</em>, <em>responder: bernard.engine.responder.Responder</em>, <em>trigger: bernard.engine.triggers.BaseTrigger</em>, <em>user_trigger: bernard.engine.triggers.BaseTrigger</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/engine/state.html#DefaultState"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.engine.state.DefaultState" title="Permalink to this definition">¶</a></dt>
 <dd><p>That’s the default default state. You really need to make your own default
 state but this one here is created so not everything crashes if you forget
 to.</p>
@@ -940,7 +940,7 @@ is that this trigger matches it.</p>
 <dd><p>Represents an intent to be resolved later.</p>
 <dl class="method">
 <dt id="bernard.i18n.intents.Intent.strings">
-<code class="descname">strings</code><span class="sig-paren">(</span><em>request: Union[_ForwardRef('Request')</em>, <em>NoneType] = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#Intent.strings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.Intent.strings" title="Permalink to this definition">¶</a></dt>
+<code class="descname">strings</code><span class="sig-paren">(</span><em>request: Union[_ForwardRef('Request')</em>, <em>NoneType] = None</em><span class="sig-paren">)</span> &#x2192; List[Tuple[str, ...]]<a class="reference internal" href="_modules/bernard/i18n/intents.html#Intent.strings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.Intent.strings" title="Permalink to this definition">¶</a></dt>
 <dd><p>For the given request, find the list of strings of that intent. If the
 intent does not exist, it will raise a KeyError.</p>
 </dd></dl>
@@ -954,13 +954,13 @@ intent does not exist, it will raise a KeyError.</p>
 now it only handles one.</p>
 <dl class="method">
 <dt id="bernard.i18n.intents.IntentsDb.get">
-<code class="descname">get</code><span class="sig-paren">(</span><em>key: str, locale: Union[str, NoneType]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsDb.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsDb.get" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get</code><span class="sig-paren">(</span><em>key: str, locale: Union[str, NoneType]</em><span class="sig-paren">)</span> &#x2192; List[Tuple[str, ...]]<a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsDb.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsDb.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a single set of intents.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="bernard.i18n.intents.IntentsDb.update">
-<code class="descname">update</code><span class="sig-paren">(</span><em>new_data: Dict[Union[str, NoneType], Dict[str, List[str]]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsDb.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsDb.update" title="Permalink to this definition">¶</a></dt>
+<code class="descname">update</code><span class="sig-paren">(</span><em>new_data: Dict[Union[str, NoneType], Dict[str, List[Tuple[str, ...]]]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/i18n/intents.html#IntentsDb.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.i18n.intents.IntentsDb.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Receive an update from the loaders.</p>
 </dd></dl>
 
@@ -1491,8 +1491,21 @@ one provided by the implementer).</li>
 code here is inspired from PostgreSQL’s pg_trgm module and should give similar
 or identical results.</p>
 <dl class="class">
+<dt id="bernard.trigram.LabelMatcher">
+<em class="property">class </em><code class="descclassname">bernard.trigram.</code><code class="descname">LabelMatcher</code><span class="sig-paren">(</span><em>trigrams: List[Tuple[bernard.trigram.Trigram, L]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/trigram.html#LabelMatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.LabelMatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows to match trigrams and associate an arbitrary label to them. When
+matching, the label will be returned along with the score.</p>
+<dl class="method">
+<dt id="bernard.trigram.LabelMatcher.similarity">
+<code class="descname">similarity</code><span class="sig-paren">(</span><em>other: bernard.trigram.Trigram</em><span class="sig-paren">)</span> &#x2192; Tuple[float, L]<a class="reference internal" href="_modules/bernard/trigram.html#LabelMatcher.similarity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.LabelMatcher.similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the best matching score and the associated label.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="bernard.trigram.Matcher">
-<em class="property">class </em><code class="descclassname">bernard.trigram.</code><code class="descname">Matcher</code><span class="sig-paren">(</span><em>trigrams: List[bernard.trigram.Trigram]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/trigram.html#Matcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.Matcher" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">bernard.trigram.</code><code class="descname">Matcher</code><span class="sig-paren">(</span><em>trigrams: List[Union[bernard.trigram.Trigram, typing.Tuple[bernard.trigram.Trigram, ...]]]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bernard/trigram.html#Matcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bernard.trigram.Matcher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Allows to match several trigrams at once. This is useful to detect intents.</p>
 <dl class="method">
 <dt id="bernard.trigram.Matcher.similarity">

@@ -160,10 +160,22 @@
 <span class="sd">or identical results.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">unidecode</span> <span class="k">import</span> <span class="n">unidecode</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">deque</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Iterable</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+    <span class="n">Tuple</span><span class="p">,</span>
+    <span class="n">TypeVar</span><span class="p">,</span>
+    <span class="n">Union</span><span class="p">,</span>
+<span class="p">)</span>
 
+<span class="kn">from</span> <span class="nn">unidecode</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">unidecode</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">RE_WHITESPACES</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[\W.,;?!</span><span class="se">\&#39;</span><span class="s1">&quot;«»\-_\s]+&#39;</span><span class="p">)</span>
 
@@ -254,20 +266,60 @@
 <span class="sd">    Allows to match several trigrams at once. This is useful to detect intents.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trigrams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Trigram</span><span class="p">]):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">trigrams</span> <span class="o">=</span> <span class="n">trigrams</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trigrams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Trigram</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Trigram</span><span class="p">,</span> <span class="o">...</span><span class="p">]]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigrams</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">t</span><span class="p">,)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Trigram</span><span class="p">)</span> <span class="k">else</span> <span class="n">t</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trigrams</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_match</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">local</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Trigram</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">other</span><span class="p">:</span> <span class="n">Trigram</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Match a trigram with another one. If the negative matching wins,</span>
+<span class="sd">        returns an inverted matching.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">local</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="n">other</span>
+        <span class="n">neg</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="n">x</span> <span class="o">%</span> <span class="n">other</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">local</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">neg</span> <span class="o">&gt;</span> <span class="n">pos</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0</span>
+
+        <span class="k">return</span> <span class="n">pos</span>
 
 <div class="viewcode-block" id="Matcher.similarity"><a class="viewcode-back" href="../../api.html#bernard.trigram.Matcher.similarity">[docs]</a>    <span class="k">def</span> <span class="nf">similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Trigram</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the best similarity within known trigrams.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span> <span class="o">%</span> <span class="n">other</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trigrams</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_match</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trigrams</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__mod__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Shortcut notation using the modulo operator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">similarity</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
+
+
+<span class="n">L</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LabelMatcher"><a class="viewcode-back" href="../../api.html#bernard.trigram.LabelMatcher">[docs]</a><span class="k">class</span> <span class="nc">LabelMatcher</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allows to match trigrams and associate an arbitrary label to them. When</span>
+<span class="sd">    matching, the label will be returned along with the score.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trigrams</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Trigram</span><span class="p">,</span> <span class="n">L</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trigrams</span> <span class="o">=</span> <span class="n">trigrams</span>
+
+<div class="viewcode-block" id="LabelMatcher.similarity"><a class="viewcode-back" href="../../api.html#bernard.trigram.LabelMatcher.similarity">[docs]</a>    <span class="k">def</span> <span class="nf">similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="n">Trigram</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">L</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the best matching score and the associated label.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="p">((</span><span class="n">t</span> <span class="o">%</span> <span class="n">other</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trigrams</span><span class="p">),</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span></div></div>
 </pre></div>
 
            </div>

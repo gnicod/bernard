@@ -16,12 +16,10 @@ import os
 import sys
 import recommonmark
 from recommonmark.transform import AutoStructify
-sys.path.insert(0, os.path.abspath('./src/'))
+sys.path.insert(0, os.path.abspath('../src/'))
+
 
 github_doc_root="https://github.com/BernardFW/bernard/blob/develop/doc/"
-
-
-
 
 # -- Project information -----------------------------------------------------
 

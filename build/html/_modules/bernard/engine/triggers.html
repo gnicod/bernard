@@ -155,13 +155,35 @@
   <h1>Source code for bernard.engine.triggers</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
 <span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Text</span> <span class="k">as</span> <span class="n">TextT</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
-<span class="kn">from</span> <span class="nn">bernard.i18n.intents</span> <span class="k">import</span> <span class="n">Intent</span>
-<span class="kn">from</span> <span class="nn">bernard.i18n</span> <span class="k">import</span> <span class="n">intents</span><span class="p">,</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">bernard.trigram</span> <span class="k">import</span> <span class="n">Matcher</span><span class="p">,</span> <span class="n">Trigram</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="n">Request</span>
-<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="n">layers</span> <span class="k">as</span> <span class="n">l</span>
-<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="n">run_or_return</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Text</span> <span class="k">as</span> <span class="n">TextT</span><span class="p">,</span>
+    <span class="n">Type</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">layers</span> <span class="k">as</span> <span class="n">l</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Request</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.i18n</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">intents</span><span class="p">,</span>
+    <span class="n">render</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.i18n.intents</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Intent</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.trigram</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Matcher</span><span class="p">,</span>
+    <span class="n">Trigram</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">run_or_return</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">BaseTrigger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -304,7 +326,8 @@
 
         <span class="n">tl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">RawText</span><span class="p">)</span>
         <span class="n">matcher</span> <span class="o">=</span> <span class="n">Matcher</span><span class="p">([</span>
-            <span class="n">Trigram</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">intent</span><span class="o">.</span><span class="n">strings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="n">Trigram</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">intent</span><span class="o">.</span><span class="n">strings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
         <span class="p">])</span>
 
         <span class="k">return</span> <span class="n">matcher</span> <span class="o">%</span> <span class="n">Trigram</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></div></div>
@@ -333,9 +356,10 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Look for the QuickReply layer&#39;s slug into available choices.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bernard.platforms.facebook</span> <span class="k">import</span> <span class="n">layers</span> <span class="k">as</span> <span class="n">fbl</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">qr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">QuickReply</span><span class="p">)</span>
+            <span class="n">qr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">fbl</span><span class="o">.</span><span class="n">QuickReply</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">chosen</span> <span class="o">=</span> <span class="n">choices</span><span class="p">[</span><span class="n">qr</span><span class="o">.</span><span class="n">slug</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">slug</span> <span class="o">=</span> <span class="n">qr</span><span class="o">.</span><span class="n">slug</span>
 
@@ -360,9 +384,9 @@
                 <span class="n">strings</span> <span class="o">+=</span> <span class="k">await</span> <span class="n">intent</span><span class="o">.</span><span class="n">strings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]:</span>
-                <span class="n">strings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
+                <span class="n">strings</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">],))</span>
 
-            <span class="n">matcher</span> <span class="o">=</span> <span class="n">Matcher</span><span class="p">([</span><span class="n">Trigram</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">])</span>
+            <span class="n">matcher</span> <span class="o">=</span> <span class="n">Matcher</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">Trigram</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">strings</span><span class="p">])</span>
             <span class="n">score</span> <span class="o">=</span> <span class="n">matcher</span> <span class="o">%</span> <span class="n">Trigram</span><span class="p">(</span><span class="k">await</span> <span class="n">render</span><span class="p">(</span><span class="n">tl</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">score</span> <span class="o">&gt;</span> <span class="n">best</span><span class="p">:</span>
@@ -381,13 +405,14 @@
 <span class="sd">        - If there is a quick reply, then use its payload as choice slug</span>
 <span class="sd">        - Otherwise, try to match each choice with its intent</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">bernard.platforms.facebook</span> <span class="k">import</span> <span class="n">layers</span> <span class="k">as</span> <span class="n">fbl</span>
 
         <span class="n">choices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get_trans_reg</span><span class="p">(</span><span class="s1">&#39;choices&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">choices</span><span class="p">:</span>
             <span class="k">return</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">has_layer</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">QuickReply</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">has_layer</span><span class="p">(</span><span class="n">fbl</span><span class="o">.</span><span class="n">QuickReply</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rank_qr</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">has_layer</span><span class="p">(</span><span class="n">l</span><span class="o">.</span><span class="n">RawText</span><span class="p">):</span>
             <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rank_text</span><span class="p">(</span><span class="n">choices</span><span class="p">)</span></div></div>

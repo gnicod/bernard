@@ -155,31 +155,81 @@
   <h1>Source code for bernard.platforms.facebook.platform</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
 
-<span class="kn">import</span> <span class="nn">aiohttp</span>
 <span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">import</span> <span class="nn">ujson</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">tzinfo</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">wrap</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Any</span><span class="p">,</span>
+    <span class="n">Dict</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Optional</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">urljoin</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">aiohttp</span>
 <span class="kn">import</span> <span class="nn">jwt</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="k">import</span> <span class="n">wrap</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Text</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">urljoin</span>
+<span class="kn">from</span> <span class="nn">dateutil</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">tz</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">bernard.reporter</span> <span class="k">import</span> <span class="n">reporter</span>
-<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="n">patch_qs</span><span class="p">,</span> <span class="n">dict_is_subset</span>
-<span class="kn">from</span> <span class="nn">dateutil</span> <span class="k">import</span> <span class="n">tz</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">tzinfo</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.responder</span> <span class="k">import</span> <span class="n">Responder</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="n">Request</span><span class="p">,</span> <span class="n">BaseMessage</span><span class="p">,</span> <span class="n">User</span><span class="p">,</span> <span class="n">Conversation</span>
-<span class="kn">from</span> <span class="nn">bernard.i18n.translator</span> <span class="k">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">Stack</span><span class="p">,</span> <span class="n">BaseLayer</span>
-<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="n">layers</span> <span class="k">as</span> <span class="n">lyr</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.platform</span> <span class="k">import</span> <span class="n">PlatformOperationError</span><span class="p">,</span> <span class="n">SimplePlatform</span>
-<span class="kn">from</span> <span class="nn">bernard.layers.definitions</span> <span class="k">import</span> <span class="n">BaseMediaLayer</span>
-<span class="kn">from</span> <span class="nn">bernard.media.base</span> <span class="k">import</span> <span class="n">BaseMedia</span><span class="p">,</span> <span class="n">UrlMedia</span>
-<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">import</span> <span class="nn">ujson</span>
+<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">layers</span> <span class="k">as</span> <span class="n">lyr</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">settings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.platform</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">PlatformOperationError</span><span class="p">,</span>
+    <span class="n">SimplePlatform</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseMessage</span><span class="p">,</span>
+    <span class="n">Conversation</span><span class="p">,</span>
+    <span class="n">Request</span><span class="p">,</span>
+    <span class="n">User</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.responder</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Responder</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.i18n.translator</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">render</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseLayer</span><span class="p">,</span>
+    <span class="n">Stack</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.layers.definitions</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseMediaLayer</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.media.base</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseMedia</span><span class="p">,</span>
+    <span class="n">UrlMedia</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.reporter</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">reporter</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.utils</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">dict_is_subset</span><span class="p">,</span>
+    <span class="n">patch_qs</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">.layers</span> <span class="k">import</span> <span class="n">MessagingType</span>
-
+<span class="kn">from</span> <span class="nn">.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">ButtonTemplate</span><span class="p">,</span>
+    <span class="n">GenericTemplate</span><span class="p">,</span>
+    <span class="n">MessagingType</span><span class="p">,</span>
+    <span class="n">OptIn</span><span class="p">,</span>
+    <span class="n">QuickRepliesList</span><span class="p">,</span>
+    <span class="n">QuickReply</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">MESSAGES_ENDPOINT</span> <span class="o">=</span> <span class="s1">&#39;https://graph.facebook.com/v2.6/me/messages&#39;</span>
 <span class="n">PROFILE_ENDPOINT</span> <span class="o">=</span> <span class="s1">&#39;https://graph.facebook.com/v2.6/me/messenger_profile&#39;</span>
@@ -375,7 +425,7 @@
                 <span class="p">)))</span>
 
         <span class="k">if</span> <span class="s1">&#39;quick_reply&#39;</span> <span class="ow">in</span> <span class="n">msg</span><span class="p">:</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">QuickReply</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;quick_reply&#39;</span><span class="p">][</span><span class="s1">&#39;payload&#39;</span><span class="p">]))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">QuickReply</span><span class="p">(</span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;quick_reply&#39;</span><span class="p">][</span><span class="s1">&#39;payload&#39;</span><span class="p">]))</span>
 
         <span class="k">if</span> <span class="s1">&#39;postback&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">:</span>
             <span class="n">payload</span> <span class="o">=</span> <span class="n">ujson</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">[</span><span class="s1">&#39;postback&#39;</span><span class="p">][</span><span class="s1">&#39;payload&#39;</span><span class="p">])</span>
@@ -393,7 +443,7 @@
             <span class="p">))</span>
 
         <span class="k">if</span> <span class="s1">&#39;optin&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">:</span>
-            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">OptIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">[</span><span class="s1">&#39;optin&#39;</span><span class="p">][</span><span class="s1">&#39;ref&#39;</span><span class="p">]))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OptIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_event</span><span class="p">[</span><span class="s1">&#39;optin&#39;</span><span class="p">][</span><span class="s1">&#39;ref&#39;</span><span class="p">]))</span>
 
         <span class="k">return</span> <span class="n">out</span></div>
 
@@ -432,9 +482,9 @@
 
     <span class="n">PATTERNS</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="s1">&#39;^(Text|RawText|MultiText)+ QuickRepliesList? MessagingType?$&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;generic_template&#39;</span><span class="p">:</span> <span class="s1">&#39;^FbGenericTemplate QuickRepliesList? &#39;</span>
+        <span class="s1">&#39;generic_template&#39;</span><span class="p">:</span> <span class="s1">&#39;^GenericTemplate QuickRepliesList? &#39;</span>
                             <span class="s1">&#39;MessagingType?$&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;button_template&#39;</span><span class="p">:</span> <span class="s1">&#39;^FbButtonTemplate QuickRepliesList? &#39;</span>
+        <span class="s1">&#39;button_template&#39;</span><span class="p">:</span> <span class="s1">&#39;^ButtonTemplate QuickRepliesList? &#39;</span>
                            <span class="s1">&#39;MessagingType?$&#39;</span><span class="p">,</span>
         <span class="s1">&#39;attachment&#39;</span><span class="p">:</span> <span class="s1">&#39;^(Image|Audio|Video|File) QuickRepliesList? &#39;</span>
                       <span class="s1">&#39;MessagingType?$&#39;</span><span class="p">,</span>
@@ -448,10 +498,10 @@
 <span class="sd">        bot to work and they take a lot of time to run.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_whitelist</span><span class="p">()</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_get_started</span><span class="p">()</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_greeting_text</span><span class="p">()</span>
         <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_persistent_menu</span><span class="p">()</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_whitelist</span><span class="p">()</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_messenger_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Text</span><span class="p">]):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -604,26 +654,26 @@
                                      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">page_id</span><span class="p">))</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">_make_qr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                       <span class="n">qr</span><span class="p">:</span> <span class="n">lyr</span><span class="o">.</span><span class="n">QuickRepliesList</span><span class="o">.</span><span class="n">BaseOption</span><span class="p">,</span>
+                       <span class="n">qr</span><span class="p">:</span> <span class="n">QuickRepliesList</span><span class="o">.</span><span class="n">BaseOption</span><span class="p">,</span>
                        <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a single quick reply&#39;s content.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qr</span><span class="p">,</span> <span class="n">lyr</span><span class="o">.</span><span class="n">QuickRepliesList</span><span class="o">.</span><span class="n">TextOption</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qr</span><span class="p">,</span> <span class="n">QuickRepliesList</span><span class="o">.</span><span class="n">TextOption</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">{</span>
                 <span class="s1">&#39;content_type&#39;</span><span class="p">:</span> <span class="s1">&#39;text&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="k">await</span> <span class="n">render</span><span class="p">(</span><span class="n">qr</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">request</span><span class="p">),</span>
                 <span class="s1">&#39;payload&#39;</span><span class="p">:</span> <span class="n">qr</span><span class="o">.</span><span class="n">slug</span><span class="p">,</span>
             <span class="p">}</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qr</span><span class="p">,</span> <span class="n">lyr</span><span class="o">.</span><span class="n">QuickRepliesList</span><span class="o">.</span><span class="n">LocationOption</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qr</span><span class="p">,</span> <span class="n">QuickRepliesList</span><span class="o">.</span><span class="n">LocationOption</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">{</span>
                 <span class="s1">&#39;content_type&#39;</span><span class="p">:</span> <span class="s1">&#39;location&#39;</span><span class="p">,</span>
             <span class="p">}</span>
 
     <span class="k">async</span> <span class="k">def</span> <span class="nf">_add_qr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">qr</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">QuickRepliesList</span><span class="p">)</span>
+            <span class="n">qr</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">QuickRepliesList</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
@@ -673,7 +723,7 @@
 <span class="sd">        Generates and send a generic template.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">gt</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">FbGenericTemplate</span><span class="p">)</span>
+        <span class="n">gt</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">GenericTemplate</span><span class="p">)</span>
         <span class="n">payload</span> <span class="o">=</span> <span class="k">await</span> <span class="n">gt</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 
         <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span>
@@ -691,7 +741,7 @@
 <span class="sd">        Generates and send a button template.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">gt</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">lyr</span><span class="o">.</span><span class="n">FbButtonTemplate</span><span class="p">)</span>
+        <span class="n">gt</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">ButtonTemplate</span><span class="p">)</span>
 
         <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;template_type&#39;</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span>

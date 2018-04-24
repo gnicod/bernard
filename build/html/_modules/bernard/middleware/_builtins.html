@@ -154,13 +154,28 @@
             
   <h1>Source code for bernard.middleware._builtins</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Text</span> <span class="k">as</span> <span class="n">TextT</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
-<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="n">layers</span> <span class="k">as</span> <span class="n">lyr</span>
-<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="n">settings</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="n">Request</span>
-<span class="kn">from</span> <span class="nn">bernard.i18n</span> <span class="k">import</span> <span class="n">render</span>
-<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">Stack</span><span class="p">,</span> <span class="n">BaseLayer</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+    <span class="n">List</span><span class="p">,</span>
+    <span class="n">Text</span> <span class="k">as</span> <span class="n">TextT</span><span class="p">,</span>
+<span class="p">)</span>
 
+<span class="kn">from</span> <span class="nn">bernard</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">layers</span> <span class="k">as</span> <span class="n">lyr</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.conf</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">settings</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.request</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Request</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.i18n</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">render</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseLayer</span><span class="p">,</span>
+    <span class="n">Stack</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">bernard.engine.responder</span> <span class="k">import</span> <span class="n">Responder</span>
@@ -248,6 +263,9 @@
                 <span class="n">ns</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">stack</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">ns</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">stack</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lyr</span><span class="o">.</span><span class="n">Sleep</span><span class="p">)])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ns</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ns</span>
 
         <span class="n">last</span> <span class="o">=</span> <span class="n">ns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">last</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lyr</span><span class="o">.</span><span class="n">Sleep</span><span class="p">):</span>

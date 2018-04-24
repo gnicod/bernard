@@ -154,12 +154,27 @@
             
   <h1>Source code for bernard.engine.state</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Iterator</span>
-<span class="kn">from</span> <span class="nn">bernard.core.health_check</span> <span class="k">import</span> <span class="n">HealthCheckFail</span>
-<span class="kn">from</span> <span class="nn">bernard.engine.triggers</span> <span class="k">import</span> <span class="n">BaseTrigger</span>
-<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="n">BaseLayer</span><span class="p">,</span> <span class="n">Text</span>
-<span class="kn">from</span> <span class="nn">.responder</span> <span class="k">import</span> <span class="n">Responder</span>
-<span class="kn">from</span> <span class="nn">.request</span> <span class="k">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Iterator</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">bernard.core.health_check</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">HealthCheckFail</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.engine.triggers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseTrigger</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">bernard.layers</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">BaseLayer</span><span class="p">,</span>
+    <span class="n">Text</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.request</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Request</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.responder</span> <span class="k">import</span> <span class="p">(</span>
+    <span class="n">Responder</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="BaseState"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState">[docs]</a><span class="k">class</span> <span class="nc">BaseState</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -176,10 +191,12 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span>
                  <span class="n">responder</span><span class="p">:</span> <span class="n">Responder</span><span class="p">,</span>
-                 <span class="n">trigger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseTrigger</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                 <span class="n">trigger</span><span class="p">:</span> <span class="n">BaseTrigger</span><span class="p">,</span>
+                 <span class="n">user_trigger</span><span class="p">:</span> <span class="n">BaseTrigger</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">responder</span> <span class="o">=</span> <span class="n">responder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trigger</span> <span class="o">=</span> <span class="n">trigger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_trigger</span> <span class="o">=</span> <span class="n">user_trigger</span>
 
 <div class="viewcode-block" id="BaseState.name"><a class="viewcode-back" href="../../../api.html#bernard.engine.state.BaseState.name">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -264,7 +281,6 @@
 <span class="sd">        Send another stupid text.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">Text</span><span class="p">(</span><span class="s1">&#39;Something went wrong in my head and I cannot answer&#39;</span><span class="p">))</span></div></div>
-
 </pre></div>
 
            </div>
