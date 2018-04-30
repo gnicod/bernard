@@ -85,7 +85,7 @@ from .layers import (
     InlineQuery,
     Reply,
     Update,
-)
+    File)
 from .media import (
     Photo,
 )
@@ -347,7 +347,7 @@ class TelegramResponder(Responder):
                 layer.message = self._update['callback_query']['message']
 
         if 'inline_query' in self._update \
-                and stack.has_layer(AnswerInlineQuery):
+            and stack.has_layer(AnswerInlineQuery):
             a = stack.get_layer(AnswerInlineQuery)
             a.inline_query_id = self._update['inline_query']['id']
 
@@ -390,6 +390,7 @@ class Telegram(SimplePlatform):
                     '|^Markdown InlineKeyboard? Reply? Update$',
         'sleep': '^Sleep$',
         'typing': '^Typing$',
+        'file': '^File$',
     }
 
     @classmethod
@@ -461,7 +462,7 @@ class Telegram(SimplePlatform):
         })
 
     async def message_from_token(self, token: Text, payload: Any) \
-            -> Optional[BaseMessage]:
+        -> Optional[BaseMessage]:
         try:
             tk = jwt.decode(token, settings.WEBVIEW_SECRET_KEY)
         except jwt.InvalidTokenError:
@@ -570,7 +571,7 @@ class Telegram(SimplePlatform):
 
                 raise PlatformOperationError(
                     'Telegram replied with an error: {}'
-                    .format(desc)
+                        .format(desc)
                 )
         except (ValueError, TypeError, KeyError):
             raise PlatformOperationError('An unknown Telegram error occurred')
@@ -695,6 +696,32 @@ class Telegram(SimplePlatform):
                 chat_id=request.message.get_chat_id(),
                 action='typing',
             )
+
+    async def _send_file(self, request: Request, stack: Stack):
+        """
+        Send a Telegram Document
+        """
+        parts = []
+        chat_id = request.message.get_chat_id()
+
+        for layer in stack.layers:
+            if isinstance(layer, (File)):
+                document = layer.document
+                parts.append(document)
+
+        for part in parts[:-1]:
+            await self.call(
+                'sendDocument',
+                text=part,
+                chat_id=chat_id,
+            )
+
+        msg = {
+            'document': parts[-1],
+            'chat_id': chat_id,
+        }
+        await set_reply_markup(msg, request, stack)
+        await self.call('sendDocument', **msg)
 
     def ensure_usable_media(self, media: BaseMedia) -> BaseMedia:
         raise NotImplementedError

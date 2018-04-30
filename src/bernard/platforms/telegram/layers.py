@@ -566,3 +566,17 @@ class BotCommand(BaseLayer):
 
     def __hash__(self):
         return hash(self.command)
+
+class File(BaseLayer):
+    """
+    Use this layer to send a Telegram Document
+    """
+
+    def __init__(self, document: Text):
+        self.document = document
+
+    def _repr_arguments(self):
+        return []
+
+    def __eq__(self, other):
+        return self.__class__ == other.__class__
