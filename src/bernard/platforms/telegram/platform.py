@@ -85,6 +85,7 @@ from .layers import (
     InlineQuery,
     Reply,
     Update,
+    TalkToSender,
     File)
 from .media import (
     Photo,
@@ -378,14 +379,16 @@ class Telegram(SimplePlatform):
     NAME = 'telegram'
     PATTERNS = {
         'plain_text': '^(Text|RawText)+ '
-                      '(InlineKeyboard|ReplyKeyboard|ReplyKeyboardRemove)? '
-                      'Reply?$'
+                      '(InlineKeyboard|ReplyKeyboard|ReplyKeyboardRemove'
+                      '|TalkToSender)? '
+                      '(Reply|TalkToSender)?$'
 
                       '|^(Text|RawText) InlineKeyboard? Reply? Update$',
         'inline_answer': '^AnswerInlineQuery$',
         'markdown': '^Markdown+ '
-                    '(InlineKeyboard|ReplyKeyboard|ReplyKeyboardRemove)? '
-                    'Reply?$'
+                    '(InlineKeyboard|ReplyKeyboard|ReplyKeyboardRemove'
+                    '|TalkToSender)? '
+                    '(Reply|TalkToSender)?$'
 
                     '|^Markdown InlineKeyboard? Reply? Update$',
         'sleep': '^Sleep$',
@@ -609,6 +612,10 @@ class Telegram(SimplePlatform):
 
         parts = []
         chat_id = request.message.get_chat_id()
+        sender_stack = None
+        for layer in stack.layers:
+            if isinstance(layer, (TalkToSender)):
+                chat_id = request.message.get_user()._user['id']
 
         for layer in stack.layers:
             if isinstance(layer, (lyr.Text, lyr.RawText, lyr.Markdown)):

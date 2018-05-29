@@ -580,3 +580,16 @@ class File(BaseLayer):
 
     def __eq__(self, other):
         return self.__class__ == other.__class__
+
+class TalkToSender(BaseLayer):
+    """
+    Use this layer to send messages to the sender only
+    Useful in group conversation or inline mode
+    """
+
+    def _repr_arguments(self):
+        return []
+
+    def __eq__(self, other):
+        return self.__class__ == other.__class__
+
